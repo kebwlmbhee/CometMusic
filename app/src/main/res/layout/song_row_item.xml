@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginStart="@dimen/sm"
+            android:layout_marginEnd="12dp"
+            app:cardCornerRadius="0dp"
+            app:strokeColor="@color/light_green"
+            app:strokeWidth="0dp"
+            app:cardElevation="@dimen/sm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="?attr/colorOnSecondary">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.0" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="1.0" />
+
+                <ImageView
+                    android:id="@+id/itemArtworkView"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="-4dp"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginBottom="-4dp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:src="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guidelineStart"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="VisualLintBounds,ImageContrastCheck" />
+
+                <View
+                    android:id="@+id/grayBackground"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    android:background="?attr/colorOnSecondary"
+                    android:translationZ="-1dp"
+                    app:layout_constraintBottom_toBottomOf="@id/itemArtworkView"
+                    app:layout_constraintEnd_toEndOf="@id/itemArtworkView"
+                    app:layout_constraintHorizontal_bias="0.62"
+                    app:layout_constraintStart_toStartOf="@id/itemArtworkView"
+                    app:layout_constraintTop_toTopOf="@id/itemArtworkView" />
+
+                <TextView
+                    android:id="@+id/titleView"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/xx_md"
+                    android:layout_marginStart="@dimen/sm"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/sm"
+                    android:textColor="?attr/colorSecondary"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+                    app:layout_constraintStart_toEndOf="@id/itemArtworkView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Pneumonoultramicroscopicsilicovolcanoconiosis" />
+
+                <TextView
+                    android:id="@+id/durationView"
+                    android:layout_width="@dimen/x_lg"
+                    android:layout_height="@dimen/x_md"
+                    android:layout_marginStart="@dimen/sm"
+                    android:layout_marginBottom="@dimen/xxs_sm"
+                    android:textColor="?attr/colorSecondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/itemArtworkView"
+                    tools:ignore="TextSizeCheck"
+                    tools:text="12:15:30" />
+
+                <TextView
+                    android:id="@+id/sizeView"
+                    android:layout_width="@dimen/xx_lg"
+                    android:layout_height="@dimen/x_md"
+                    android:layout_marginStart="@dimen/xx_md"
+                    android:layout_marginBottom="@dimen/xxs_sm"
+                    android:textColor="?attr/colorSecondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/durationView"
+                    tools:ignore="TextSizeCheck"
+                    tools:text="1023.5 MB" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MusicPlayer</string>
+    <string name="choose_directory">Choose Directory</string>
+    <string name="choose_main_music_folder">Choose Main Music Folder</string>
+    <string name="reset_main_music_folder">Reset Main Music Folder</string>
+    <string name="song_artwork">Song Artwork</string>
+    <string name="click_double_back_message">Press Back Again to Leave</string>
+    <string name="PlayOrPause">Play or Pause</string>
+    <string name="pause">Pause</string>
+    <string name="skip_previous">Skip Previous</string>
+    <string name="skip_next">Skip Next</string>
+    <string name="open_app">open App</string>
+    <string name="repeat_all">repeat all</string>
+    <string name="shuffle">random shuffle</string>
+    <string name="repeat_one">repeat one</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="can_not_find_current_second">Can not find current second</string>
+    <string name="placeHolder_current_playing_song">Current Playing Song</string>
+    <string name="same_as_the_current_folder">Same as the current folder</string>
+    <string name="toolbar_search">Search</string>
+    <string name="toolbar_more">More</string>
+</resources>

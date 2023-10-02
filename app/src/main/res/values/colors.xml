@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_color">#FF3632</color>
+    <color name="primary_color_variant">#D50500</color>
+    <color name="secondary_color">#EE9D17</color>
+    <color name="secondary_color_variant">#B3750D</color>
+    <color name="dark">#000000</color>
+    <color name="black">#7C000000</color>
+    <color name="white">#E8E3E3</color>
+    <color name="soft_green">#8DA39A</color>
+    <color name="light_green">#5AB35C</color>
+    <color name="gray">#7A7373</color>
+    <color name="brown_gray">#37AF8686</color>
+    <color name="brown_black">#161616</color>
+</resources>

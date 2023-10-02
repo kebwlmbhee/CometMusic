@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/searchBtn"
+        android:title="@string/toolbar_search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more_action"
+        android:title="@string/toolbar_more"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_choose_main_folder"
+                android:title="@string/choose_main_music_folder" />
+            <item
+                android:id="@+id/reset_main_folder"
+                android:title="@string/reset_main_music_folder" />
+        </menu>
+    </item>
+
+</menu>

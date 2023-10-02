@@ -1,0 +1,122 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.musicplayer'
+    compileSdk 34
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    defaultConfig {
+        applicationId "com.example.musicplayer"
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '33.0.2'
+    buildFeatures {
+        dataBinding true
+    }
+}
+
+dependencies {
+
+    def lifecycle_version = "2.6.2"
+    def arch_version = "2.2.0"
+    def nav_version = "2.7.3"
+    def media3_version = "1.1.1"
+
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    // optional - helpers for implementing LifecycleOwner in a Service
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
+
+    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+
+    // optional - ReactiveStreams support for LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
+
+    // optional - Test helpers for LiveData
+    testImplementation "androidx.arch.core:core-testing:$arch_version"
+
+    // optional - Test helpers for Lifecycle runtime
+    testImplementation "androidx.lifecycle:lifecycle-runtime-testing:$lifecycle_version"
+
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
+    implementation "androidx.activity:activity-ktx:1.7.2"
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // media3
+    implementation "androidx.media3:media3-exoplayer:$media3_version"
+    implementation "androidx.media3:media3-exoplayer-dash:$media3_version"
+    implementation "androidx.media3:media3-session:$media3_version"
+    implementation "androidx.media3:media3-ui:$media3_version"
+
+    // media3 test
+    // Utilities for testing media components (including ExoPlayer components)
+    implementation "androidx.media3:media3-test-utils:$media3_version"
+    implementation "androidx.media3:media3-test-utils-robolectric:$media3_version"
+    // Utilities for testing media components (including ExoPlayer components) via Robolectric
+    implementation "androidx.media3:media3-test-utils-robolectric:$media3_version"
+
+    // async load image
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    // fast scroll
+    // https://github.com/zhanghai/AndroidFastScroll
+    implementation 'me.zhanghai.android.fastscroll:library:1.2.0'
+
+
+    // test
+    // Required -- JUnit 4 framework
+    testImplementation "junit:junit:4.13.2"
+    // Optional -- Robolectric environment
+    testImplementation "androidx.test:core:1.5.0"
+
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    // Optional -- Mockito framework
+    testImplementation "org.mockito:mockito-core:3.12.4"
+}
