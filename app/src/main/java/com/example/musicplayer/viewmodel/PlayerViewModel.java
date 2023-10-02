@@ -1,7 +1,6 @@
 package com.example.musicplayer.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -181,7 +180,6 @@ public class PlayerViewModel extends AndroidViewModel {
             long position = Objects.requireNonNull(player.getValue()).getCurrentPosition();
             currentSecond.setValue(millisecondToSecond(position));
         } else {
-            Log.d(TAG, "setCurrentSecond: " + player.getValue().getCurrentMediaItem());
             currentSecond.setValue(-1);
             Toast.makeText(this.getApplication(), R.string.can_not_find_current_second, Toast.LENGTH_SHORT).show();
 
