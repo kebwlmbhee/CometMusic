@@ -132,6 +132,7 @@
                     style="@style/customSeekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintVertical_bias="0.5"
                     android:layout_marginTop="@dimen/x_lg"
                     android:progressTint="@color/secondary_color"
                     android:thumb="@drawable/seek_thumb"
