@@ -314,7 +314,6 @@ public class CurrentPlayerViewFragment extends Fragment {
                         // set cancelMarker visibility
                         playerViewBinding.cancelMarker.setVisibility(View.VISIBLE);
                         isSeekbarBeingTouched = true;
-                        playerViewModel.setIsSeekbarBeingTouched(true);
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -338,7 +337,6 @@ public class CurrentPlayerViewFragment extends Fragment {
 
                     case MotionEvent.ACTION_UP:
                         isSeekbarBeingTouched = false;
-                        playerViewModel.setIsSeekbarBeingTouched(false);
                         // cancel user timeline manipulation
                         if (touchCancelMarker()) {
                             Objects.requireNonNull(cancelDrawable).setTint(Color.RED);

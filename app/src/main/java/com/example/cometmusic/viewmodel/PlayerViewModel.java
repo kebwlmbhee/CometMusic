@@ -43,8 +43,6 @@ public class PlayerViewModel extends AndroidViewModel {
     
     private final MutableLiveData<Boolean> savedSongNotFind = new MutableLiveData<>();
 
-    private final MutableLiveData<Boolean> isSeekbarBeingTouched = new MutableLiveData<>();
-
     private final MutableLiveData<List<MediaItem>> mediaItems = new MutableLiveData<>();
 
     private final MutableLiveData<Integer> currentSongIndex = new MutableLiveData<>();
@@ -334,17 +332,6 @@ public class PlayerViewModel extends AndroidViewModel {
     
     public MutableLiveData<Boolean> getSavedSongNotFind() {
         return savedSongNotFind;
-    }
-
-    public void setIsSeekbarBeingTouched(boolean isTouch) {
-        isSeekbarBeingTouched.setValue(isTouch);
-    }
-
-    public MutableLiveData<Boolean> getIsSeekbarBeingTouched() {
-        if(isSeekbarBeingTouched.getValue() == null) {
-            setIsSeekbarBeingTouched(false);
-        }
-        return isSeekbarBeingTouched;
     }
 
     public MutableLiveData<Integer> getCurrentSongIndex() {
