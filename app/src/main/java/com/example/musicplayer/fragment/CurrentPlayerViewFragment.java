@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,7 +78,7 @@ public class CurrentPlayerViewFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, backPressedCallback);
     }
-    
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,11 +99,17 @@ public class CurrentPlayerViewFragment extends Fragment {
                 new PlayerViewModelFactory(requireActivity().getApplication(), sharedData))
                 .get(PlayerViewModel.class);
 
+        player = playerViewModel.getPlayer().getValue();
+
+        if(player == null) {
+            Toast.makeText(requireContext(), "CurrentPlayerViewFragment: player is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         playerViewBinding.setPlayerViewModel(playerViewModel);
         playerViewBinding.setPlayerViewFragment(this);
 
         playerViewBinding.setLifecycleOwner(getViewLifecycleOwner());
-
 
         // song name marquee
         playerViewBinding.songNameView.setSelected(true);
@@ -123,12 +128,14 @@ public class CurrentPlayerViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-            if(player == null || !playerViewModel.isPlayerExistMediaItem()) {
+        if (player != null) {
+            if(!playerViewModel.isPlayerExistMediaItem()) {
                 initializePlayer();
             }
             else {
                 playerControls();
             }
+        }
     }
 
     private void initializePlayer() {
@@ -144,9 +151,10 @@ public class CurrentPlayerViewFragment extends Fragment {
                 playerViewModel.setPlayer(player);
 
                 playerViewModel.setPlayerMediaItems(playerViewModel.getPlayerMediaItems().getValue());
-                int currentSongIndex = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
-                long currentSongPosition = sharedData.getSongPosition() * 1000L;
-                playerViewModel.seekToSongIndexAndPosition(currentSongIndex, currentSongPosition);
+
+                int index = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
+                long position = sharedData.getSongPosition() * 1000L;
+                playerViewModel.seekToSongIndexAndPosition(index, position);
 
                 playerControls();
             } catch (ExecutionException | InterruptedException e) {
@@ -189,11 +197,11 @@ public class CurrentPlayerViewFragment extends Fragment {
         playerViewModel.setDurationSecond();
         playerViewModel.setCurrentSecond();
 
-        updateCurrentPlayingCover(playerViewModel.getPlayerCurrentIndex());
+        // make sure seekbar update initially
+        playerViewBinding.seekbar.setMax(Objects.requireNonNull(playerViewModel.getDurationSecond().getValue()));
+        playerViewBinding.seekbar.setProgress(Objects.requireNonNull(playerViewModel.getCurrentSecond().getValue()));
 
-        int mode = Objects.requireNonNull(playerViewModel.getPlayerMode().getValue());
-        playerViewModel.setPlayerMode(mode);
-        playerViewModel.seekToPosition(sharedData.getSongPosition());
+        updateCurrentPlayingCover(playerViewModel.getPlayerCurrentIndex());
 
         initializePlayerListener();
 
@@ -238,10 +246,8 @@ public class CurrentPlayerViewFragment extends Fragment {
         playerViewModel.setCurrentSongName();
 
         // if it is after onAttach and before onDetach
-        if(isAdded()) {
-            Log.d(TAG, "onSongTransition: ");
+        if(isAdded())
             updateCurrentPlayingCover(playerViewModel.getPlayerCurrentIndex());
-        }
     }
 
     private void handlePlayerUI() {

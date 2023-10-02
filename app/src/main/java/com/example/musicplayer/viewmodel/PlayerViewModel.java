@@ -152,7 +152,7 @@ public class PlayerViewModel extends AndroidViewModel {
     public MutableLiveData<Integer> getDurationSecond() {
         if(durationSecond.getValue() == null) {
             // set a larger initial value for durationSecond to ensure proper seekbar positioning
-            durationSecond.setValue(4 * 60);
+            durationSecond.setValue(0x3f3f3f3f);
         }
         return durationSecond;
     }
