@@ -1,4 +1,4 @@
-package com.example.musicplayer.utils;
+package com.example.cometmusic.utils;
 
 import android.graphics.Rect;
 import android.view.View;

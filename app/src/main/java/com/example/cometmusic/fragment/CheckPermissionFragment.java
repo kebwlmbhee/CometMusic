@@ -1,4 +1,4 @@
-package com.example.musicplayer.fragment;
+package com.example.cometmusic.fragment;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -22,8 +22,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.example.musicplayer.R;
-import com.example.musicplayer.model.SharedData;
+import com.example.cometmusic.R;
+import com.example.cometmusic.model.SharedData;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 

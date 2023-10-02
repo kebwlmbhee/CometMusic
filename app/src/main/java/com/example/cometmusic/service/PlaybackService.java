@@ -1,4 +1,4 @@
-package com.example.musicplayer.service;
+package com.example.cometmusic.service;
 
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -24,11 +24,11 @@ import androidx.media3.session.SessionCommand;
 import androidx.media3.session.SessionCommands;
 import androidx.media3.session.SessionResult;
 
-import com.example.musicplayer.MainActivity;
-import com.example.musicplayer.R;
-import com.example.musicplayer.model.FetchAudioFiles;
-import com.example.musicplayer.model.SharedData;
-import com.example.musicplayer.model.Song;
+import com.example.cometmusic.MainActivity;
+import com.example.cometmusic.R;
+import com.example.cometmusic.model.FetchAudioFiles;
+import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.model.Song;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;

@@ -1,4 +1,4 @@
-package com.example.musicplayer.viewmodel;
+package com.example.cometmusic.viewmodel;
 
 import android.app.Application;
 
@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.musicplayer.model.SharedData;
+import com.example.cometmusic.model.SharedData;
 
 public class PlayerViewModelFactory implements ViewModelProvider.Factory {
     private final SharedData sharedData;

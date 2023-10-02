@@ -1,4 +1,4 @@
-package com.example.musicplayer;
+package com.example.cometmusic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -15,9 +15,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.media3.session.MediaController;
 
-import com.example.musicplayer.model.FetchAudioFiles;
-import com.example.musicplayer.model.SharedData;
-import com.example.musicplayer.viewmodel.PlayerViewModel;
+import com.example.cometmusic.model.FetchAudioFiles;
+import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.viewmodel.PlayerViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

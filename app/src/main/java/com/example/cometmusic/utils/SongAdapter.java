@@ -1,10 +1,9 @@
-package com.example.musicplayer.utils;
+package com.example.cometmusic.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,9 +18,9 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.example.musicplayer.R;
-import com.example.musicplayer.databinding.SongRowItemBinding;
-import com.example.musicplayer.model.Song;
+import com.example.cometmusic.R;
+import com.example.cometmusic.databinding.SongRowItemBinding;
+import com.example.cometmusic.model.Song;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.DecimalFormat;

@@ -1,4 +1,4 @@
-package com.example.musicplayer.model;
+package com.example.cometmusic.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;

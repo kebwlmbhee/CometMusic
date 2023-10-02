@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicPlayer</string>
+    <string name="app_name">CometMusic</string>
     <string name="choose_directory">Choose Directory</string>
     <string name="choose_main_music_folder">Choose Main Music Folder</string>
     <string name="reset_main_music_folder">Reset Main Music Folder</string>

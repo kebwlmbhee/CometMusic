@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "MusicPlayer"
+rootProject.name = "CometMusic"
 include ':app'

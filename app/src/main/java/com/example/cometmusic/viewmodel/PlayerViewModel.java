@@ -1,4 +1,4 @@
-package com.example.musicplayer.viewmodel;
+package com.example.cometmusic.viewmodel;
 
 import android.app.Application;
 import android.widget.Toast;
@@ -10,10 +10,10 @@ import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 
-import com.example.musicplayer.R;
-import com.example.musicplayer.model.FetchAudioFiles;
-import com.example.musicplayer.model.SharedData;
-import com.example.musicplayer.model.Song;
+import com.example.cometmusic.R;
+import com.example.cometmusic.model.FetchAudioFiles;
+import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.model.Song;
 
 import java.util.List;
 import java.util.Locale;

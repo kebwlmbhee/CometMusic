@@ -1,4 +1,4 @@
-package com.example.musicplayer.model;
+package com.example.cometmusic.model;
 
 import android.content.ContentUris;
 import android.content.Context;

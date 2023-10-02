@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.musicplayer'
+    namespace 'com.example.cometmusic'
     compileSdk 34
 
     testOptions {
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.musicplayer"
+        applicationId "com.example.cometmusic"
         minSdk 29
         targetSdk 34
         versionCode 1
@@ -118,5 +118,5 @@ dependencies {
 
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     // Optional -- Mockito framework
-    testImplementation "org.mockito:mockito-core:3.12.4"
+    testImplementation "org.mockito:mockito-core:5.2.0"
 }

@@ -1,4 +1,4 @@
-package com.example.musicplayer.model;
+package com.example.cometmusic.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ public class SharedData {
 
     private final Context context;
 
-    private final String MAIN_PREF = "MusicPlayer";
+    private final String MAIN_PREF = "CometMusic";
     private final String DENIED_KEY = "DeniedTimes";
     private final String CHOOSE_DIR_KEY = "ChooseDir";
     private final String SONG_ID_KEY = "SongId";

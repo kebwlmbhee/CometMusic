@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MusicPlayer.Night" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.CometMusic.Night" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Status bar color -->
         <item name="android:statusBarColor" tools:targetApi="26">@color/black</item>
         <item name="android:navigationBarColor" tools:targetApi="26">@color/black</item>
     </style>
 
-    <style name="Theme.MusicPlayer" parent="Base.Theme.MusicPlayer.Night">
+    <style name="Theme.CometMusic" parent="Base.Theme.CometMusic.Night">
         <item name="colorPrimary">@color/dark</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@android:color/white</item>

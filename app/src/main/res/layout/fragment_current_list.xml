@@ -6,11 +6,11 @@
     <data>
         <variable
             name="playerViewModel"
-            type="com.example.musicplayer.viewmodel.PlayerViewModel" />
+            type="com.example.cometmusic.viewmodel.PlayerViewModel" />
         
         <variable
             name="currentListFragment"
-            type="com.example.musicplayer.fragment.CurrentListFragment" />
+            type="com.example.cometmusic.fragment.CurrentListFragment" />
     </data>
 
     <FrameLayout
