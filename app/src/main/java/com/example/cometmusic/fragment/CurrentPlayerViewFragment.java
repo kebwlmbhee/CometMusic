@@ -35,7 +35,6 @@ import com.example.cometmusic.databinding.FragmentCurrentPlayerViewBinding;
 import com.example.cometmusic.model.SharedData;
 import com.example.cometmusic.model.Song;
 import com.example.cometmusic.viewmodel.PlayerViewModel;
-import com.example.cometmusic.viewmodel.PlayerViewModelFactory;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -95,9 +94,7 @@ public class CurrentPlayerViewFragment extends Fragment {
 
         SharedData sharedData = new SharedData(requireContext());
 
-        playerViewModel = new ViewModelProvider(requireActivity(),
-                new PlayerViewModelFactory(requireActivity().getApplication(), sharedData))
-                .get(PlayerViewModel.class);
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
 
         player = playerViewModel.getPlayer().getValue();
 
