@@ -314,9 +314,14 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<Song>> getSongs() {
-        if(songs.getValue() == null || songs.getValue().isEmpty())
+        if(songs.getValue() == null) {
             songs.setValue(fetchAudioFiles.getSongs());
+        }
         return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs.setValue(songs);
     }
 
     public int getSavedMediaItemIndex() {

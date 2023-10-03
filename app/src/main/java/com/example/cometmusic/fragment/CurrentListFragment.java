@@ -510,8 +510,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         savedMediaItemIndex = 0;
 
-        allSongs.clear();
-
         allSongs = playerViewModel.getSongs().getValue();
 
         if (allSongs != null) {
@@ -682,6 +680,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             });
 
     private void reloadAll(String uriString) {
+
+        playerViewModel.setSongs(null);
 
         if(Objects.equals(uriString, sharedData.getChooseDir())) {
             Toast.makeText(requireContext(), R.string.same_as_the_current_folder, Toast.LENGTH_SHORT).show();
