@@ -14,9 +14,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.cometmusic.model.SharedData;
 import com.example.cometmusic.viewmodel.PlayerViewModel;
-import com.example.cometmusic.viewmodel.PlayerViewModelFactory;
 
 @UnstableApi public class MainActivity extends AppCompatActivity {
 
@@ -43,11 +41,7 @@ import com.example.cometmusic.viewmodel.PlayerViewModelFactory;
 
         setContentView(R.layout.activity_main);
 
-        SharedData sharedData = new SharedData(this);
-
-        playerViewModel = new ViewModelProvider(this,
-                new PlayerViewModelFactory(getApplication(), sharedData))
-                .get(PlayerViewModel.class);
+        playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
 
         if (DEV_MODE) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
