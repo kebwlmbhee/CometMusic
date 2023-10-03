@@ -59,7 +59,6 @@ import com.example.cometmusic.service.PlaybackService;
 import com.example.cometmusic.utils.ItemSpacingDecoration;
 import com.example.cometmusic.utils.SongAdapter;
 import com.example.cometmusic.viewmodel.PlayerViewModel;
-import com.example.cometmusic.viewmodel.PlayerViewModelFactory;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 
@@ -192,9 +191,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         sharedData = new SharedData(requireContext());
 
 
-        playerViewModel = new ViewModelProvider(requireActivity(),
-                new PlayerViewModelFactory(requireActivity().getApplication(), sharedData))
-                .get(PlayerViewModel.class);
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
 
         sessionToken = playerViewModel.getSessionToken().getValue();
 
@@ -588,7 +585,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             int savedPosition = 0;
 
             // if finding the song in current path, then get stored position
-            if(Boolean.FALSE.equals(playerViewModel.getSavedSongNotFind().getValue())) {
+            if(Boolean.FALSE.equals(playerViewModel.getSavedSongNotFound().getValue())) {
                 savedPosition = sharedData.getSongPosition();
             }
 
