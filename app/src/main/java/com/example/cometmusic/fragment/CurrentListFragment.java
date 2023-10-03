@@ -438,7 +438,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
                 Player.Listener.super.onMediaItemTransition(mediaItem, reason);
 
 
-                if(playerViewModel.getCurrentSongIndex().getValue() != player.getCurrentMediaItemIndex()) {
+                int currentSongIndex = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
+                if(currentSongIndex != player.getCurrentMediaItemIndex()) {
                     scrollToPosition(player.getCurrentMediaItemIndex());
 
                     playerViewModel.setCurrentSongIndex(player.getCurrentMediaItemIndex());
@@ -469,9 +470,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         playerViewModel.setCurrentSongName();
 
-//        if (songAdapter != null) {
-//            songAdapter.clearViewBorder(false);
-//        }
+        if (songAdapter != null) {
+            songAdapter.clearViewBorder(false);
+        }
 
         playerViewModel.checkIsPlaying();
     }
@@ -511,7 +512,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         allSongs.clear();
 
-        allSongs = playerViewModel.updateAllChosenSongs().getValue();
+        allSongs = playerViewModel.getSongs().getValue();
 
         if (allSongs != null) {
             savedMediaItemIndex = playerViewModel.getSavedMediaItemIndex();
@@ -568,10 +569,10 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // set the adapter to recyclerview
         mainBinding.recyclerview.setAdapter(songAdapter);
 
-        /**
-         * if the users open the app without the service running
-         * or if the user click reload folder
-         * re-setMediaItems and load stored song status
+        /*
+          if the users open the app without the service running
+          or if the user click reload folder
+          re-setMediaItems and load stored song status
          */
 //        if(player.getCurrentMediaItem() == null || isReloadFolder) {
         if(!isServiceAlreadyRunning || isReloadFolder) {
@@ -600,9 +601,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             // set the song current position in seconds
             playerViewModel.setCurrentSecond();
         }
-        /**
-         * if the users open the app with the service running (without reload folder)
-         * load current player status
+        /*
+          if the users open the app with the service running (without reload folder)
+          load current player status
          */
         else {
             playerViewModel.preparePlayer();
