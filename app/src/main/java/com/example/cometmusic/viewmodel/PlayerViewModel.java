@@ -24,6 +24,9 @@ public class PlayerViewModel extends AndroidViewModel {
     public static final String playerIsNullException =
             "The player should be initialized by calling the setPlayer() method first";
 
+    public static final String savedSongNotFoundVariableIsNull =
+            "The savedSongNotFound variable should be initialized by calling the getSavedMediaItemIndex() method first";
+
     private final FetchAudioFiles fetchAudioFiles;
     private final MutableLiveData<MediaController> player = new MutableLiveData<>();
 
@@ -41,7 +44,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
     private final MutableLiveData<List<Song>> songs = new MutableLiveData<>();
     
-    private final MutableLiveData<Boolean> savedSongNotFind = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> savedSongNotFound = new MutableLiveData<>();
 
     private final MutableLiveData<List<MediaItem>> mediaItems = new MutableLiveData<>();
 
@@ -52,10 +55,18 @@ public class PlayerViewModel extends AndroidViewModel {
 
     private String TAG = "MyTag";
 
-    public PlayerViewModel(Application application, SharedData sharedData) {
+    // for prod.
+    public PlayerViewModel(Application application) {
+        super(application);
+        sharedData = new SharedData(application.getApplicationContext());
+        fetchAudioFiles = FetchAudioFiles.getInstance(getApplication().getApplicationContext());
+    }
+
+    // for test
+    public PlayerViewModel(Application application, SharedData sharedData, FetchAudioFiles fetchAudioFiles) {
         super(application);
         this.sharedData = sharedData;
-        fetchAudioFiles = FetchAudioFiles.getInstance(getApplication().getApplicationContext());
+        this.fetchAudioFiles = fetchAudioFiles;
     }
 
     public void setPlayer(MediaController player) {
@@ -316,22 +327,26 @@ public class PlayerViewModel extends AndroidViewModel {
     public int getSavedMediaItemIndex() {
         int index = fetchAudioFiles.getSavedMediaItemIndex();
         // return the first song when the saved song is not found in the current path
+        System.out.println("Test: " + index);
         if(index == -1) {
-            setSavedSongNotFind(true);
+            setSavedSongNotFound(true);
             return 0;
         }
         else {
-            setSavedSongNotFind(false);
+            setSavedSongNotFound(false);
             return index;
         }
     }
 
-    public void setSavedSongNotFind(boolean isFind) {
-        savedSongNotFind.setValue(isFind);
+    public void setSavedSongNotFound(boolean isFind) {
+        savedSongNotFound.setValue(isFind);
     }
     
-    public MutableLiveData<Boolean> getSavedSongNotFind() {
-        return savedSongNotFind;
+    public MutableLiveData<Boolean> getSavedSongNotFound() {
+        if(savedSongNotFound.getValue() == null) {
+            throw new IllegalStateException(savedSongNotFoundVariableIsNull);
+        }
+        return savedSongNotFound;
     }
 
     public MutableLiveData<Integer> getCurrentSongIndex() {
