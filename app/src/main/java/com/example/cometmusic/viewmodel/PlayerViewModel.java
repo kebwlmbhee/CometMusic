@@ -313,21 +313,15 @@ public class PlayerViewModel extends AndroidViewModel {
         player.getValue().prepare();
     }
 
-    public MutableLiveData<List<Song>> updateAllChosenSongs() {
-        songs.setValue(fetchAudioFiles.getSongs());
-        return songs;
-    }
-
-    public MutableLiveData<List<Song>> getStoredSongs() {
-        if(songs.getValue() == null)
-            updateAllChosenSongs();
+    public MutableLiveData<List<Song>> getSongs() {
+        if(songs.getValue() == null || songs.getValue().isEmpty())
+            songs.setValue(fetchAudioFiles.getSongs());
         return songs;
     }
 
     public int getSavedMediaItemIndex() {
         int index = fetchAudioFiles.getSavedMediaItemIndex();
         // return the first song when the saved song is not found in the current path
-        System.out.println("Test: " + index);
         if(index == -1) {
             setSavedSongNotFound(true);
             return 0;
