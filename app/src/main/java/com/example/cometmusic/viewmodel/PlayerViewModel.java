@@ -164,21 +164,21 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getDurationSecond() {
         if(durationSecond.getValue() == null) {
-            // set a larger initial value for durationSecond to ensure proper seekbar positioning
-            durationSecond.setValue(0x3f3f3f3f);
+            durationSecond.setValue(100);
         }
         return durationSecond;
     }
 
     public void setDurationSecond() {
-        if(isPlayerExistMediaItem()) {
-            durationSecond.setValue(
-                    millisecondToSecond(Objects.requireNonNull(
-                            getPlayer().getValue()
-                    ).getDuration())
-            );
-        }
-        setReadableDurationSecond();
+        if(!isPlayerExistMediaItem())
+            return;
+        durationSecond.setValue(
+                millisecondToSecond(Objects.requireNonNull(
+                        getPlayer().getValue()
+                ).getDuration())
+        );
+        String durationReadableString = getReadableTime(Objects.requireNonNull(durationSecond.getValue()));
+        readableDurationString.setValue(durationReadableString);
     }
 
     public MutableLiveData<Integer> getCurrentSecond() {
@@ -195,32 +195,16 @@ public class PlayerViewModel extends AndroidViewModel {
         } else {
             currentSecond.setValue(-1);
             Toast.makeText(this.getApplication(), R.string.can_not_find_current_second, Toast.LENGTH_SHORT).show();
-
         }
-        setReadableCurrentString();
-    }
 
-    public void seekToPosition(long position) {
-        Objects.requireNonNull(getPlayer().getValue()).seekTo(position);
-    }
-
-    public void seekToSongIndexAndPosition(int index, long position) {
-        Objects.requireNonNull(getPlayer().getValue()).seekTo(index, position);
-        setCurrentSecond();
-        setReadableCurrentString();
+        String currentReadableSecond = getReadableTime(Objects.requireNonNull(currentSecond.getValue()));
+        readableCurrentString.setValue(currentReadableSecond);
     }
 
     public MutableLiveData<String> getReadableCurrentString() {
         if(currentSecond.getValue() != null)
             readableCurrentString.setValue(getReadableTime((currentSecond.getValue())));
         return readableCurrentString;
-    }
-
-    public void setReadableCurrentString() {
-        if(currentSecond.getValue() != null) {
-            String currentReadableSecond = getReadableTime(currentSecond.getValue());
-            readableCurrentString.setValue(currentReadableSecond);
-        }
     }
 
     public MutableLiveData<String> getReadableDurationString() {
@@ -230,11 +214,13 @@ public class PlayerViewModel extends AndroidViewModel {
         return readableDurationString;
     }
 
-    public void setReadableDurationSecond() {
-        if(durationSecond.getValue() == null)
-            return;
-        String durationReadableString = getReadableTime(durationSecond.getValue());
-        readableDurationString.setValue(durationReadableString);
+    public void seekToPosition(long position) {
+        Objects.requireNonNull(getPlayer().getValue()).seekTo(position);
+    }
+
+    public void seekToSongIndexAndPosition(int index, long position) {
+        Objects.requireNonNull(getPlayer().getValue()).seekTo(index, position);
+        setCurrentSecond();
     }
 
     public void setSecondAndStringWhenMoving(int progress) {
