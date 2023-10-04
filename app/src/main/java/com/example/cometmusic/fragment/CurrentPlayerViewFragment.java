@@ -92,16 +92,9 @@ public class CurrentPlayerViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedData sharedData = new SharedData(requireContext());
-
         playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
 
         player = playerViewModel.getPlayer().getValue();
-
-        if(player == null) {
-            Toast.makeText(requireContext(), "CurrentPlayerViewFragment: player is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         playerViewBinding.setPlayerViewModel(playerViewModel);
         playerViewBinding.setPlayerViewFragment(this);
@@ -125,14 +118,10 @@ public class CurrentPlayerViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (player != null) {
-            if(!playerViewModel.isPlayerExistMediaItem()) {
-                initializePlayer();
-            }
-            else {
-                playerControls();
-            }
-        }
+        if (player != null && playerViewModel.isPlayerExistMediaItem())
+            playerControls();
+        else
+            initializePlayer();
     }
 
     private void initializePlayer() {
@@ -243,8 +232,9 @@ public class CurrentPlayerViewFragment extends Fragment {
         playerViewModel.setCurrentSongName();
 
         // if it is after onAttach and before onDetach
-        if(isAdded())
+        if(isAdded()) {
             updateCurrentPlayingCover(playerViewModel.getPlayerCurrentIndex());
+        }
     }
 
     private void handlePlayerUI() {
