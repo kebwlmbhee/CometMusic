@@ -54,6 +54,7 @@ public class PlayerViewModel extends AndroidViewModel {
     SharedData sharedData;
 
     private String TAG = "MyTag";
+    public static String PlayerIsNull = "Player is null";
 
     // for prod.
     public PlayerViewModel(Application application) {
@@ -80,6 +81,10 @@ public class PlayerViewModel extends AndroidViewModel {
             throw new IllegalStateException(playerIsNullException);
         }
 
+        return player;
+    }
+
+    private MutableLiveData<MediaController> getPlayerOrNull() {
         return player;
     }
 
@@ -130,8 +135,8 @@ public class PlayerViewModel extends AndroidViewModel {
         if(!isPlayerExistMediaItem())
             return;
 
-        if (Objects.requireNonNull(player.getValue()).hasNextMediaItem()) {
-            player.getValue().seekToNext();
+        if (Objects.requireNonNull(getPlayer().getValue()).hasNextMediaItem()) {
+            getPlayer().getValue().seekToNext();
         }
     }
 
@@ -139,8 +144,8 @@ public class PlayerViewModel extends AndroidViewModel {
         if(!isPlayerExistMediaItem())
             return;
 
-        if (Objects.requireNonNull(player.getValue()).hasPreviousMediaItem()) {
-            player.getValue().seekToPrevious();
+        if (Objects.requireNonNull(getPlayer().getValue()).hasPreviousMediaItem()) {
+            getPlayer().getValue().seekToPrevious();
         }
     }
 
@@ -148,7 +153,7 @@ public class PlayerViewModel extends AndroidViewModel {
         if(!isPlayerExistMediaItem())
             return 0;
 
-        return Objects.requireNonNull(player.getValue()).getCurrentMediaItemIndex();
+        return Objects.requireNonNull(getPlayer().getValue()).getCurrentMediaItemIndex();
     }
 
     public MutableLiveData<Integer> getPlayerMode() {
@@ -170,7 +175,7 @@ public class PlayerViewModel extends AndroidViewModel {
         if(isPlayerExistMediaItem()) {
             durationSecond.setValue(
                     millisecondToSecond(Objects.requireNonNull(
-                            player.getValue()
+                            getPlayer().getValue()
                     ).getDuration())
             );
         }
@@ -186,7 +191,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public void setCurrentSecond() {
         if (isPlayerExistMediaItem()) {
-            long position = Objects.requireNonNull(player.getValue()).getCurrentPosition();
+            long position = Objects.requireNonNull(getPlayer().getValue()).getCurrentPosition();
             currentSecond.setValue(millisecondToSecond(position));
         } else {
             currentSecond.setValue(-1);
@@ -197,11 +202,11 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public void seekToPosition(long position) {
-        Objects.requireNonNull(player.getValue()).seekTo(position);
+        Objects.requireNonNull(getPlayer().getValue()).seekTo(position);
     }
 
     public void seekToSongIndexAndPosition(int index, long position) {
-        Objects.requireNonNull(player.getValue()).seekTo(index, position);
+        Objects.requireNonNull(getPlayer().getValue()).seekTo(index, position);
         setCurrentSecond();
         setReadableCurrentString();
     }
@@ -244,7 +249,7 @@ public class PlayerViewModel extends AndroidViewModel {
     public void setCurrentSongName() {
         if(isPlayerExistMediaItem()) {
             String songTitle = String.valueOf(Objects.requireNonNull((
-                    Objects.requireNonNull(player.getValue()))
+                    Objects.requireNonNull(getPlayer().getValue()))
                             .getCurrentMediaItem()).mediaMetadata.title);
             currentSongName.setValue(songTitle);
         }
@@ -259,12 +264,12 @@ public class PlayerViewModel extends AndroidViewModel {
             return;
 
         // from play to pause
-        if (Objects.requireNonNull(player.getValue()).isPlaying()) {
-            player.getValue().pause();
+        if (Objects.requireNonNull(getPlayer().getValue()).isPlaying()) {
+            getPlayer().getValue().pause();
         }
         // from pause to play
-        else if(!player.getValue().isPlaying()){
-            player.getValue().play();
+        else if(!getPlayer().getValue().isPlaying()){
+            getPlayer().getValue().play();
         }
         checkIsPlaying();
     }
@@ -273,7 +278,7 @@ public class PlayerViewModel extends AndroidViewModel {
         if(!isPlayerExistMediaItem())
             return;
         // check current status is playing or is not playing
-        isPlaying.setValue(Objects.requireNonNull(player.getValue()).isPlaying());
+        isPlaying.setValue(Objects.requireNonNull(getPlayer().getValue()).isPlaying());
     }
 
     public MutableLiveData<Boolean> getIsPlaying() {
@@ -285,9 +290,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public void setPlayerMediaItems(List<MediaItem> mediaItems) {
         this.mediaItems.setValue(mediaItems);
-        if(player.getValue() == null)
-            return;
-        player.getValue().setMediaItems(mediaItems);
+        Objects.requireNonNull(getPlayer().getValue()).setMediaItems(mediaItems);
     }
 
     public MutableLiveData<List<MediaItem>> getPlayerMediaItems() {
@@ -295,22 +298,21 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public boolean isPlayerExistMediaItem() {
-        return player.getValue() != null && player.getValue().getCurrentMediaItem() != null;
+        return getPlayerOrNull().getValue() != null &&
+                getPlayerOrNull().getValue().getCurrentMediaItem() != null;
     }
 
     public void clearPlayer() {
-        if(player.getValue() == null)
+        if(getPlayerOrNull().getValue() == null)
             return;
-        player.getValue().clearMediaItems();
-        player.getValue().pause();
+        Objects.requireNonNull(getPlayer().getValue()).clearMediaItems();
+        getPlayer().getValue().pause();
 
-        player.getValue().stop();
+        getPlayer().getValue().stop();
     }
 
     public void preparePlayer() {
-        if(player.getValue() == null)
-            return;
-        player.getValue().prepare();
+        Objects.requireNonNull(getPlayer().getValue()).prepare();
     }
 
     public MutableLiveData<List<Song>> getSongs() {
@@ -394,9 +396,9 @@ public class PlayerViewModel extends AndroidViewModel {
         if(!isPlayerExistMediaItem())
             return;
         String currentSongId = Objects.requireNonNull(Objects.requireNonNull(
-                player.getValue()).getCurrentMediaItem())
+                getPlayer().getValue()).getCurrentMediaItem())
                 .mediaId;
-        int playingCurrentSecond = millisecondToSecond(player.getValue().getCurrentPosition());
+        int playingCurrentSecond = millisecondToSecond(getPlayer().getValue().getCurrentPosition());
 
 
         int playerMode = Objects.requireNonNull(getPlayerMode().getValue());
