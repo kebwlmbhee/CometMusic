@@ -239,9 +239,7 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public void setSecondAndStringWhenMoving(int progress) {
         currentSecond.setValue(progress);
-        if(currentSecond.getValue() == null)
-            return;
-        String currentReadableSecond = getReadableTime(currentSecond.getValue());
+        String currentReadableSecond = getReadableTime(Objects.requireNonNull(currentSecond.getValue()));
         readableCurrentString.setValue(currentReadableSecond);
     }
 
