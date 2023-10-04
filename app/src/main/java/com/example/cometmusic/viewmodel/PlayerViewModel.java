@@ -263,13 +263,14 @@ public class PlayerViewModel extends AndroidViewModel {
             return;
 
         // from play to pause
-        if (Objects.requireNonNull(getPlayer().getValue()).isPlaying()) {
-            getPlayer().getValue().pause();
+        if (Boolean.TRUE.equals(getIsPlaying().getValue())) {
+            Objects.requireNonNull(getPlayer().getValue()).pause();
         }
         // from pause to play
-        else if(!getPlayer().getValue().isPlaying()){
-            getPlayer().getValue().play();
+        else {
+            Objects.requireNonNull(getPlayer().getValue()).play();
         }
+
         checkIsPlaying();
     }
 
