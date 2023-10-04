@@ -432,6 +432,12 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
                 error.printStackTrace();
             }
 
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                Player.Listener.super.onIsPlayingChanged(isPlaying);
+                playerViewModel.checkIsPlaying();
+            }
+
             // just for update UI, cuz player is buffering
             @Override
             public void onMediaItemTransition(@NonNullApi MediaItem mediaItem, int reason) {
