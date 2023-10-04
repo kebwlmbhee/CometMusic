@@ -255,6 +255,8 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<String> getCurrentSongName() {
+        if(currentSongName.getValue() == null)
+            setCurrentSongName();
         return currentSongName;
     }
 
