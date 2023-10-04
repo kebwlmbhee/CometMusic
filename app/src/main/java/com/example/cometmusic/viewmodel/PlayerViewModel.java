@@ -54,7 +54,6 @@ public class PlayerViewModel extends AndroidViewModel {
     SharedData sharedData;
 
     private String TAG = "MyTag";
-    public static String PlayerIsNull = "Player is null";
 
     // for prod.
     public PlayerViewModel(Application application) {
@@ -84,7 +83,7 @@ public class PlayerViewModel extends AndroidViewModel {
         return player;
     }
 
-    private MutableLiveData<MediaController> getPlayerOrNull() {
+    public MutableLiveData<MediaController> getPlayerOrNull() {
         return player;
     }
 
@@ -369,12 +368,12 @@ public class PlayerViewModel extends AndroidViewModel {
         this.sessionToken.setValue(sessionToken);
     }
 
-    private int millisecondToSecond(long duration) {
+    public int millisecondToSecond(long duration) {
         final int oneSec = 1000;
         return (int) (duration / oneSec);
     }
 
-    private String getReadableTime(int duration) {
+    public String getReadableTime(int duration) {
         String time = "";
 
         final int oneHr = 60 * 60;
