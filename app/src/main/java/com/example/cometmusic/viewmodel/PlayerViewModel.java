@@ -138,14 +138,14 @@ public class PlayerViewModel extends AndroidViewModel {
         }
     }
     public void skipToNextSong() {
-        if(!isPlayerExistMediaItem() || Objects.requireNonNull(getPlayer().getValue()).hasNextMediaItem())
+        if(!isPlayerExistMediaItem() || !Objects.requireNonNull(getPlayer().getValue()).hasNextMediaItem())
             return;
 
         getPlayer().getValue().seekToNext();
     }
 
     public void skipToPreviousSong() {
-        if(!isPlayerExistMediaItem() || Objects.requireNonNull(getPlayer().getValue()).hasPreviousMediaItem())
+        if(!isPlayerExistMediaItem() || !Objects.requireNonNull(getPlayer().getValue()).hasPreviousMediaItem())
             return;
 
         getPlayer().getValue().seekToPrevious();
