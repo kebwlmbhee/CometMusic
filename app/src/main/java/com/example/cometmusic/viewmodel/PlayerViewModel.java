@@ -138,21 +138,17 @@ public class PlayerViewModel extends AndroidViewModel {
         }
     }
     public void skipToNextSong() {
-        if(!isPlayerExistMediaItem())
+        if(!isPlayerExistMediaItem() || Objects.requireNonNull(getPlayer().getValue()).hasNextMediaItem())
             return;
 
-        if (Objects.requireNonNull(getPlayer().getValue()).hasNextMediaItem()) {
-            getPlayer().getValue().seekToNext();
-        }
+        getPlayer().getValue().seekToNext();
     }
 
     public void skipToPreviousSong() {
-        if(!isPlayerExistMediaItem())
+        if(!isPlayerExistMediaItem() || Objects.requireNonNull(getPlayer().getValue()).hasPreviousMediaItem())
             return;
 
-        if (Objects.requireNonNull(getPlayer().getValue()).hasPreviousMediaItem()) {
-            getPlayer().getValue().seekToPrevious();
-        }
+        getPlayer().getValue().seekToPrevious();
     }
 
     public int getPlayerCurrentIndex() {
