@@ -77,11 +77,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBaseline_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/seekbarWrapper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHeight_percent="0.2"
                 app:layout_constraintStart_toEndOf="@id/artworkWrapper"
-                app:layout_constraintTop_toBottomOf="@id/headWrapper"
-                app:layout_constraintBottom_toTopOf="@id/seekbarWrapper">
+                app:layout_constraintTop_toBottomOf="@id/headWrapper">
 
                 <TextView
                     android:id="@+id/songNameView"
@@ -107,11 +107,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:paddingHorizontal="@dimen/md"
-                app:layout_constraintBottom_toBottomOf="@id/controlWrapper"
-                app:layout_constraintHeight_percent="0.3"
-                app:layout_constraintStart_toEndOf="@+id/artworkWrapper"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/songInfoWrapper" >
+                app:layout_constraintBottom_toTopOf="@id/controlWrapper"
+                app:layout_constraintHeight_percent="0.35"
+                app:layout_constraintStart_toEndOf="@+id/artworkWrapper"
+                app:layout_constraintTop_toBottomOf="@+id/songInfoWrapper">
 
                 <TextView
                     android:id="@+id/progressView"
@@ -123,7 +123,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8"
+                    app:layout_constraintVertical_bias="0.85"
                     tools:text="00:00:00" />
 
                 <TextView
@@ -136,7 +136,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.8"
+                    app:layout_constraintVertical_bias="0.85"
                     tools:text="00:00:00" />
 
                 <SeekBar
@@ -155,17 +155,19 @@
                     app:layout_constraintHorizontal_bias="0.3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5" />
+                    app:layout_constraintVertical_bias="0.6" />
 
                 <TextView
                     android:id="@+id/cancelMarker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:drawableStartCompat="@drawable/ic_cancel"
                     android:visibility="gone"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:drawableStartCompat="@drawable/ic_cancel"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
