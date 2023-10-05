@@ -1,7 +1,6 @@
 package com.example.cometmusic.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -393,9 +392,8 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     @Override
-    protected void onCleared() {
+    public void onCleared() {
         saveCurrentSongStatus();
         super.onCleared();
     }
-
 }
