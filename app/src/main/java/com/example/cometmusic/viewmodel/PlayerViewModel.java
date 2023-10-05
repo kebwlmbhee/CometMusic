@@ -1,6 +1,7 @@
 package com.example.cometmusic.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -198,15 +199,16 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<String> getReadableCurrentString() {
-        if(currentSecond.getValue() != null)
-            readableCurrentString.setValue(getReadableTime((currentSecond.getValue())));
+        if(readableCurrentString.getValue() == null)
+            setCurrentSecond();
+
         return readableCurrentString;
     }
 
     public MutableLiveData<String> getReadableDurationString() {
-        if(readableDurationString.getValue() == null) {
-            readableDurationString.setValue("null");
-        }
+        if(readableDurationString.getValue() == null)
+            setDurationSecond();
+
         return readableDurationString;
     }
 
