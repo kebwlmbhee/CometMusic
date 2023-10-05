@@ -110,6 +110,13 @@ public class PlayerViewModel extends AndroidViewModel {
         }
     }
 
+    public MutableLiveData<Integer> getPlayerMode() {
+        if(playerMode.getValue() == null) {
+            playerMode.setValue(sharedData.getPlayerMode());
+        }
+        return playerMode;
+    }
+
     public void clickRepeatButton() {
 
         switch (Objects.requireNonNull(getPlayerMode().getValue())) {
@@ -153,13 +160,6 @@ public class PlayerViewModel extends AndroidViewModel {
             return 0;
 
         return Objects.requireNonNull(getPlayer().getValue()).getCurrentMediaItemIndex();
-    }
-
-    public MutableLiveData<Integer> getPlayerMode() {
-        if(playerMode.getValue() == null) {
-            playerMode.setValue(sharedData.getPlayerMode());
-        }
-        return playerMode;
     }
 
     public MutableLiveData<Integer> getDurationSecond() {
