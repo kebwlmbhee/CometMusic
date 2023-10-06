@@ -28,6 +28,8 @@ public class PlayerViewModel extends AndroidViewModel {
             "The savedSongNotFound variable should be initialized by calling the getSavedMediaItemIndex() method first";
 
     private final FetchAudioFiles fetchAudioFiles;
+    private final SharedData sharedData;
+
     private final MutableLiveData<MediaController> player = new MutableLiveData<>();
 
     private final MutableLiveData<Integer> playerMode = new MutableLiveData<>();
@@ -51,11 +53,8 @@ public class PlayerViewModel extends AndroidViewModel {
     private final MutableLiveData<Integer> currentSongIndex = new MutableLiveData<>();
 
     private final MutableLiveData<SessionToken> sessionToken = new MutableLiveData<>();
-    SharedData sharedData;
 
-    private String TAG = "MyTag";
-
-    // for prod.
+    // for prod
     public PlayerViewModel(Application application) {
         super(application);
         sharedData = new SharedData(application.getApplicationContext());
