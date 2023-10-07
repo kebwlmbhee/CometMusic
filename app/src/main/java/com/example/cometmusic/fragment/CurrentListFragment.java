@@ -542,7 +542,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         if (songsSize == 0) {
             mainBinding.toolbarTitle.setText(toolbarTitle);
             mainBinding.homeControlWrapper.setVisibility(View.GONE);
-            Toast.makeText(requireContext(), "No Songs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.no_songs, Toast.LENGTH_SHORT).show();
             return;
         }
         // update the toolbar title

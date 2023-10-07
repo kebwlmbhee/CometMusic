@@ -18,4 +18,13 @@
     <string name="same_as_the_current_main_music_folder">Same as the current main music folder</string>
     <string name="toolbar_search">Search</string>
     <string name="toolbar_more">More</string>
+    <string name="TiramisuOrAbove_permission_message_1">1. Allow to read and write Media.</string>
+    <string name="TiramisuOrAbove_permission_message_2">2. Allow to read Images.</string>
+    <string name="less_than_Tiramisu_permission_message">Allow to read and write Media and Images.</string>
+    <string name="cancel">Cancel</string>
+    <string name="allow">Allow</string>
+    <string name="requesting_permission">Requesting Permission</string>
+    <string name="permission_denied">Permission Denied.</string>
+    <string name="permission_denied_twice">Permission Already Denied TWICE, Please Manually Enable.</string>
+    <string name="no_songs">No Songs</string>
 </resources>
