@@ -1,12 +1,12 @@
 package com.example.cometmusic.fragment;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -18,12 +18,12 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.utils.buildversion.BuildVersionProviderImpl;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
@@ -31,6 +31,19 @@ public class CheckPermissionFragment extends Fragment {
 
     private SharedData sharedData;
 
+    private final BuildVersionProviderImpl buildVersionProvider;
+
+    // for prod
+    public CheckPermissionFragment() {
+        buildVersionProvider = new BuildVersionProviderImpl();
+    }
+
+
+    // for test
+    public CheckPermissionFragment(SharedData sharedData, BuildVersionProviderImpl buildVersionProvider) {
+        this.sharedData = sharedData;
+        this.buildVersionProvider = buildVersionProvider;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +68,7 @@ public class CheckPermissionFragment extends Fragment {
         }
     }
 
-    private void requestStoragePermissions() {
+    public void requestStoragePermissions() {
         if (checkStoragePermissions())
             navigateToCurrentList();
         else
@@ -63,37 +76,37 @@ public class CheckPermissionFragment extends Fragment {
     }
 
     public boolean checkStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
-                && requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED;
+        if (buildVersionProvider.isTiramisuOrAbove()) {
+            return requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) == PERMISSION_GRANTED
+                && requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PERMISSION_GRANTED;
 
         } else {
-            int write = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int read = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
-            return read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED;
+            int write = requireContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int read = requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            return read == PERMISSION_GRANTED && write == PERMISSION_GRANTED;
         }
     }
 
-    private void userResponses() {
+    public void userResponses() {
         String[] permissionArray;
 
         String rationalMessage;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (buildVersionProvider.isTiramisuOrAbove()) {
             // request permission
             permissionArray = new String[]{
                     Manifest.permission.READ_MEDIA_AUDIO,
                     Manifest.permission.READ_MEDIA_IMAGES,
             };
-            rationalMessage = "1. Allow to read and write Media. \n\n" +
-                    "2. Allow to read Images.\n";
+            rationalMessage = getString(R.string.TiramisuOrAbove_permission_message_1) + "\n\n" +
+                              getString(R.string.TiramisuOrAbove_permission_message_2);
         } else {
             // request permission
             permissionArray = new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
-            rationalMessage = "Allow to read and write Media and Images.";
+            rationalMessage = getString(R.string.less_than_Tiramisu_permission_message);
         }
 
         boolean shouldShowRationale = !checkStoragePermissions();
@@ -101,15 +114,15 @@ public class CheckPermissionFragment extends Fragment {
         if (shouldShowRationale) {
 
             MaterialAlertDialogBuilder alertDialog = new MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Requesting Permission")
+                    .setTitle(R.string.requesting_permission)
                     .setMessage(rationalMessage)
                     .setCancelable(false)
-                    .setPositiveButton("Allow", (dialog, which) -> {
+                    .setPositiveButton(R.string.allow, (dialog, which) -> {
                         // request permissions
                         requestPermissionLauncher.launch(permissionArray);
                     })
-                    .setNegativeButton("Cancel", (dialog, which) -> {
-                        Toast.makeText(requireContext(), "Permission Denied.", Toast.LENGTH_SHORT).show();
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     });
 
@@ -157,10 +170,10 @@ public class CheckPermissionFragment extends Fragment {
         sharedData.setDeniedTimes(sharedData.getDeniedTimes() + 1);
         if (sharedData.getDeniedTimes() < 2) {
             requestStoragePermissions();
-            Toast.makeText(requireContext(), "Permissions Denied.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
         } else {
             openAppSettings();
-            Toast.makeText(requireContext(), "Permission Already Denied TWICE, Please Manually Enable.", Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), R.string.permission_denied_twice, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -172,7 +185,7 @@ public class CheckPermissionFragment extends Fragment {
     }
 
 
-    private void navigateToCurrentList() {
+    public void navigateToCurrentList() {
         Navigation.findNavController(requireView())
                 .navigate(R.id.currentListFragment);
     }
