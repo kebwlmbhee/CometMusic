@@ -4,7 +4,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -56,11 +55,7 @@ public class FetchAudioFiles {
         }
 
         sharedData.setDeniedTimes(0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            mediaStoreUri = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
-        } else {
-            mediaStoreUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        }
+        mediaStoreUri = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
 
         // define projection
         String[] projection = new String[]{
