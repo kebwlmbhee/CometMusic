@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CometMusic</string>
+    <string name="choose_directory">選擇資料夾</string>
+    <string name="choose_main_music_folder">選擇主音樂資料夾</string>
+    <string name="reset_main_music_folder">重置主音樂資料夾</string>
+    <string name="song_artwork">歌曲封面</string>
+    <string name="click_double_back_message">再點一次返回鍵退出</string>
+    <string name="PlayOrPause">播放或暫停</string>
+    <string name="pause">暫停</string>
+    <string name="skip_previous">上一首</string>
+    <string name="skip_next">下一首</string>
+    <string name="open_app">打開應用程式</string>
+    <string name="repeat_all">全部循環播放</string>
+    <string name="shuffle">隨機播放</string>
+    <string name="repeat_one">單曲循環播放</string>
+    <string name="can_not_find_current_second">無法找到歌曲當前秒數</string>
+    <string name="placeHolder_current_playing_song">當前播放歌曲為空</string>
+    <string name="toolbar_search">搜尋</string>
+    <string name="toolbar_more">更多選項</string>
+    <string name="same_as_the_current_main_music_folder">與當前主音樂資料夾相同</string>
 </resources>
