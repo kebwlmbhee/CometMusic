@@ -690,7 +690,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         playerViewModel.setSongs(null);
 
         if(Objects.equals(uriString, sharedData.getChooseDir())) {
-            Toast.makeText(requireContext(), R.string.same_as_the_current_folder, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.same_as_the_current_main_music_folder, Toast.LENGTH_SHORT).show();
             return;
         }
         // save URI
