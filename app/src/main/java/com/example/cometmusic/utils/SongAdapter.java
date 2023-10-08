@@ -57,7 +57,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private PlayerControlListener playerControlListener;
 
-    boolean isSearchResultsClicked = false;
+    boolean isSearch = false;
 
     // constructor
     public SongAdapter(Context context, MediaController player, List<Song> songs, RecyclerView recyclerView) {
@@ -96,7 +96,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public interface PlayerControlListener {
         void onSameItemClicked();
 
-        void collapseActionView(int position);
+        void collapseActionView();
     }
 
     public void setPlayerControlListener(PlayerControlListener listener) {
@@ -158,18 +158,19 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return;
             }
 
+
             // when user click search result
-            if (isSearchResultsClicked) {
+            if (isSearch) {
                 int targetPosition = song.getPlaylistPosition();
+                playerControlListener.collapseActionView();
                 // trigger close SearchView
-                playerControlListener.collapseActionView(targetPosition);
                 if (layoutManager != null) {
                     // scroll to make the clicked item appear at the top of the layout
                     layoutManager.scrollToPositionWithOffset(targetPosition, 0);
                 }
                 notifyItemChanged(targetPosition);
                 waitForLayoutAndStartFlashing(targetPosition);
-                isSearchResultsClicked = false;
+                isSearch = false;
             }
             // if the clicked viewHolder is the same as currentMetadata
             else if (player.getCurrentMediaItem() != null &&
@@ -186,6 +187,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 player.prepare();
                 player.play();
             }
+            playerControlListener.collapseActionView();
         });
     }
     // fast setting border
@@ -291,6 +293,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+
+
     // transform Song to MediaItem
     public List<MediaItem> getMediaItems() {
         // define a list of media items
@@ -329,8 +333,11 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @SuppressLint("NotifyDataSetChanged")
     public void filterSongs(List<Song> filteredList) {
         songs = filteredList;
-        isSearchResultsClicked = true;
         notifyDataSetChanged();
+    }
+
+    public void setIsSearch(boolean isSearch) {
+        this.isSearch = isSearch;
     }
 
     public String getDuration(int totalDuration) {

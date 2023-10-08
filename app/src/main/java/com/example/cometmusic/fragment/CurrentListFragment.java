@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -152,6 +151,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // inflate the layout for this fragment
         mainBinding = FragmentCurrentListBinding.inflate(inflater, container, false);
 
+        mainBinding.getRoot().setFocusableInTouchMode(true);
+        mainBinding.getRoot().requestFocus();
+
         return mainBinding.getRoot();
     }
 
@@ -162,6 +164,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
 
         initializeMenuToolbar(view);
+
 
         // spacing between items (adjust as needed)
         ItemSpacingDecoration itemSpacingDecoration = new ItemSpacingDecoration();
@@ -202,7 +205,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         mediaControllerFuture =
                 new MediaController.Builder(requireContext(), sessionToken).buildAsync();
-        
+
         playerViewModel.setSessionToken(sessionToken);
 
         // set layout xml variable
@@ -245,26 +248,18 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     }
 
     private void initializeMenuToolbar(View view) {
-
         Toolbar toolbar = view.findViewById(R.id.toolbar_list_fragment);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-
         MenuHost menuHost = requireActivity();
-
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 // inflate the menu and add the search button to the menu, positioning it as defined in the xml file.
-
                 menuInflater.inflate(R.menu.toolbar_layout, menu);
-
-
                 // get search button item
                 searchMenuItem = menu.findItem(R.id.searchBtn);
-
                 searchView = (SearchView) searchMenuItem.getActionView();
             }
-
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 int id = menuItem.getItemId();
@@ -279,6 +274,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
                     return true;
                 }
                 else if(id == R.id.searchBtn) {
+                    isKeyboardVisible = true;
                     searchSongs(searchView);
                     return true;
                 }
@@ -288,12 +284,11 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     }
 
     private void searchSongs(SearchView searchView) {
-
+        
         searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do whatever you need
                 return true; // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
             }
 
@@ -301,9 +296,11 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 if(isKeyboardVisible) {
                     hideKeyboard();
+                    item.getActionView().requestFocus();
                     // if keyboardVisible, do NOT collapse SearchView
                     return false;
                 }
+
                 return true;// OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
             }
         });
@@ -314,11 +311,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             public boolean onQueryTextSubmit(String query) {
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 // filter songs
-                isKeyboardVisible = true;
                 filterSongs(newText.toLowerCase());
                 return true;
             }
@@ -375,6 +370,10 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     }
 
     private void filterSongs(String query) {
+
+        songAdapter.setIsSearch(!query.isEmpty());
+
+        songAdapter.startCountdownTimer();
 
         List<Song> filteredList = new ArrayList<>();
 
@@ -721,11 +720,12 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     }
 
     @Override
-    public void collapseActionView(int position) {
+    public void collapseActionView() {
         // close SearchView
-        Log.d(TAG, "collapseActionView: ");
-        if(searchMenuItem != null)
+        if(searchMenuItem != null) {
+            hideKeyboard();
             searchMenuItem.collapseActionView();
+        }
     }
 
     @Override
@@ -754,5 +754,3 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         super.onDestroy();
     }
 }
-
-
