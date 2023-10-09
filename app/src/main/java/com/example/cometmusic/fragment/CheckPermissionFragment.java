@@ -22,8 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
+import com.example.cometmusic.factory.buildversion.BuildVersionImpl;
 import com.example.cometmusic.model.SharedData;
-import com.example.cometmusic.utils.buildversion.BuildVersionProviderImpl;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
@@ -31,18 +31,18 @@ public class CheckPermissionFragment extends Fragment {
 
     private SharedData sharedData;
 
-    private final BuildVersionProviderImpl buildVersionProvider;
+    private final BuildVersionImpl buildVersionImpl;
 
     // for prod
     public CheckPermissionFragment() {
-        buildVersionProvider = new BuildVersionProviderImpl();
+        buildVersionImpl = new BuildVersionImpl();
     }
 
 
     // for test
-    public CheckPermissionFragment(SharedData sharedData, BuildVersionProviderImpl buildVersionProvider) {
+    public CheckPermissionFragment(SharedData sharedData, BuildVersionImpl buildVersionProvider) {
         this.sharedData = sharedData;
-        this.buildVersionProvider = buildVersionProvider;
+        this.buildVersionImpl = buildVersionProvider;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class CheckPermissionFragment extends Fragment {
     }
 
     public boolean checkStoragePermissions() {
-        if (buildVersionProvider.isTiramisuOrAbove()) {
+        if (buildVersionImpl.isTiramisuOrAbove()) {
             return requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) == PERMISSION_GRANTED
                 && requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PERMISSION_GRANTED;
 
@@ -92,28 +92,34 @@ public class CheckPermissionFragment extends Fragment {
 
         String rationalMessage;
 
-        if (buildVersionProvider.isTiramisuOrAbove()) {
+        if (buildVersionImpl.isTiramisuOrAbove()) {
             // request permission
-            permissionArray = new String[]{
+            permissionArray = new String[] {
                     Manifest.permission.READ_MEDIA_AUDIO,
-                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_IMAGES
             };
-            rationalMessage = getString(R.string.TiramisuOrAbove_permission_message_1) + "\n\n" +
-                              getString(R.string.TiramisuOrAbove_permission_message_2);
+            rationalMessage = requireContext().getString(R.string.Tiramisu_or_above_permission_message_1) + "\n\n" +
+                              requireContext().getString(R.string.Tiramisu_or_above_permission_message_2);
         } else {
             // request permission
             permissionArray = new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
-            rationalMessage = getString(R.string.less_than_Tiramisu_permission_message);
+            rationalMessage = requireContext().getString(R.string.less_than_Tiramisu_permission_message);
         }
 
         boolean shouldShowRationale = !checkStoragePermissions();
 
         if (shouldShowRationale) {
+            createAlertDialog(permissionArray, rationalMessage);
+        }
+    }
 
-            MaterialAlertDialogBuilder alertDialog = new MaterialAlertDialogBuilder(requireContext())
+    // UI Dialog
+    public void createAlertDialog(String[] permissionArray, String rationalMessage) {
+        MaterialAlertDialogBuilder alertDialogBuilder =
+                new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.requesting_permission)
                     .setMessage(rationalMessage)
                     .setCancelable(false)
@@ -124,25 +130,24 @@ public class CheckPermissionFragment extends Fragment {
                     .setNegativeButton(R.string.cancel, (dialog, which) -> {
                         Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
-                    });
+                });
 
-            AlertDialog dialog = alertDialog.create();
+        AlertDialog dialog = alertDialogBuilder.create();
 
-            dialog.show();
+        dialog.show();
 
-            // get theme secondary color
-            TypedArray typedArray = requireContext().obtainStyledAttributes(new int[]{com.google.android.material.R.attr.colorSecondary});
-            int colorSecondary = typedArray.getColor(0, 0);
-            typedArray.recycle();
+        // get theme secondary color
+        TypedArray typedArray = requireContext().obtainStyledAttributes(new int[]{com.google.android.material.R.attr.colorSecondary});
+        int colorSecondary = typedArray.getColor(0, 0);
+        typedArray.recycle();
 
-            // set Allow button color
-            Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            positiveButton.setTextColor(colorSecondary);
+        // set Allow button color
+        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        positiveButton.setTextColor(colorSecondary);
 
-            // set Cancel button color
-            Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-            negativeButton.setTextColor(colorSecondary);
-        }
+        // set Cancel button color
+        Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(colorSecondary);
     }
 
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
@@ -166,9 +171,11 @@ public class CheckPermissionFragment extends Fragment {
                         }
                     });
 
-    private void handleDeniedStoragePermissions() {
-        sharedData.setDeniedTimes(sharedData.getDeniedTimes() + 1);
-        if (sharedData.getDeniedTimes() < 2) {
+    public void handleDeniedStoragePermissions() {
+        int deniedTimes = sharedData.getDeniedTimes();
+        deniedTimes += 1;
+        sharedData.setDeniedTimes(deniedTimes);
+        if (deniedTimes < 2) {
             requestStoragePermissions();
             Toast.makeText(requireContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
         } else {
@@ -177,14 +184,16 @@ public class CheckPermissionFragment extends Fragment {
         }
     }
 
-    private void openAppSettings() {
+    public void openAppSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
         intent.setData(uri);
+
         startActivity(intent);
     }
 
 
+    // UI navigation
     public void navigateToCurrentList() {
         Navigation.findNavController(requireView())
                 .navigate(R.id.currentListFragment);
