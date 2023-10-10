@@ -76,7 +76,7 @@ public class FetchAudioFiles {
             // only music, music file is non-zero
             selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
 
-            // convert URL encoded to ASCII
+            // convert URL encoded to String
             String decodedPath = Uri.decode(selectedFolderUri.getLastPathSegment());
             String removeColonPath;
 

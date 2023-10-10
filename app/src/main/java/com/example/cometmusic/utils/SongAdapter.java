@@ -31,8 +31,6 @@ import java.util.Objects;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "MyTag";
-
     private boolean isScrolling = false;
 
     private MaterialCardView currentCardHolder = null;
@@ -181,8 +179,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             else {
                 player.pause();
                 player.seekTo(position, 0);
-
-//                setViewBorder(position);
 
                 player.prepare();
                 player.play();

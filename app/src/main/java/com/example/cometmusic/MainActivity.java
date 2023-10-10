@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,8 +22,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
 
     public static final String REQUEST_UPDATE_PLAY_PAUSE_BUTTON_ACTION = "update_play_pause_button_action";
     public static final String CHANGE_PLAYER_MODE_KEY = "change_player_mode";
-
-    private static final String TAG = "MyTag";
 
     private final boolean DEV_MODE = false;
     private CloseActivityActionReceiver closeActivityActionReceiver;
@@ -135,16 +132,12 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
             unregisterReceiver(updatePlayPauseButtonActionReceiver);
             updatePlayPauseButtonActionReceiver = null;
         }
-        Log.d(TAG, "onStop: ");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-//        if(playerViewModel.isPlayerExistMediaItem())
-//            Objects.requireNonNull(playerViewModel.getPlayer().getValue()).release();
         playerViewModel = null;
-        Log.d(TAG, "onDestroy: MainActivity");
         super.onDestroy();
     }
 }

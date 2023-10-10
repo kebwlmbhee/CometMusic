@@ -387,8 +387,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             if (songAdapter != null) {
                 songAdapter.clearImageCache();
 
-                // scroll to the top of the search result
-//                mainBinding.recyclerview.scrollToPosition(0);
                 songsSize = filteredList.size();
                 songAdapter.filterSongs(filteredList);
             }
@@ -577,10 +575,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
           or if the user click reload folder
           re-setMediaItems and load stored song status
          */
-//        if(player.getCurrentMediaItem() == null || isReloadFolder) {
         if(!isServiceAlreadyRunning || isReloadFolder) {
             playerViewModel.setPlayerMediaItems(songAdapter.getMediaItems());
-//            player.setMediaItems(songAdapter.getMediaItems());
             isReloadFolder = false;
 
             // scroll to target position
@@ -666,7 +662,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         fastScrollerBuilder.build();
     }
 
-    // Create an ActivityResultLauncher to handle the folder selection
+    // create an ActivityResultLauncher to handle the folder selection
     private final ActivityResultLauncher<Intent> folderPickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {

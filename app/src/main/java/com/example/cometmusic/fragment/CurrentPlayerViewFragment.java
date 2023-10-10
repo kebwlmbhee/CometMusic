@@ -55,7 +55,6 @@ public class CurrentPlayerViewFragment extends Fragment {
     MediaController player;
     private final Handler mCalHandler = new Handler(Looper.getMainLooper());
     private Player.Listener playerListener;
-    private String TAG = "MyTag";
     private SessionToken sessionToken;
     private ListenableFuture<MediaController> mediaControllerFuture;
 
