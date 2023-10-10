@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.StrictMode;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +22,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
     public static final String REQUEST_UPDATE_PLAY_PAUSE_BUTTON_ACTION = "update_play_pause_button_action";
     public static final String CHANGE_PLAYER_MODE_KEY = "change_player_mode";
 
-    private final boolean DEV_MODE = false;
     private CloseActivityActionReceiver closeActivityActionReceiver;
 
     private ChangePlayerModeActionReceiver changePlayerModeActionReceiver;
@@ -39,24 +37,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
         setContentView(R.layout.activity_main);
 
         playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
-
-        if (DEV_MODE) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectCustomSlowCalls()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyDialog()
-                    .penaltyLog()
-                    .penaltyFlashScreen()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build());
-        }
     }
 
     // respond to the close button in the notification
