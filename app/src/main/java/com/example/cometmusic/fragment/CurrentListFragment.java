@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -405,6 +406,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_currentListFragment_to_currentPlayerViewFragment);
 
+        Log.d(TAG, "showCurrentPlayerView: 1");
         scrollToPosition(playerViewModel.getPlayerCurrentIndex());
     }
 
@@ -413,6 +415,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             mainBinding.recyclerview.scrollToPosition(scrollPosition);
         }
         if(songAdapter != null) {
+            Log.d(TAG, "scrollToPosition: self");
             songAdapter.setViewBorder(scrollPosition);
             // make sure load image
             songAdapter.notifyItemChanged(scrollPosition);
@@ -440,10 +443,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             public void onMediaItemTransition(@NonNullApi MediaItem mediaItem, int reason) {
                 Player.Listener.super.onMediaItemTransition(mediaItem, reason);
 
-
                 int currentSongIndex = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
+
                 if(currentSongIndex != player.getCurrentMediaItemIndex()) {
-                    scrollToPosition(player.getCurrentMediaItemIndex());
 
                     playerViewModel.setCurrentSongIndex(player.getCurrentMediaItemIndex());
 
@@ -473,12 +475,16 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         playerViewModel.setCurrentSongName();
 
+        scrollToPosition(player.getCurrentMediaItemIndex());
+
         if (songAdapter != null) {
             songAdapter.clearViewBorder(false);
         }
 
         playerViewModel.checkIsPlaying();
     }
+
+
 
     private void handlePlayerUI() {
 
@@ -580,6 +586,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             isReloadFolder = false;
 
             // scroll to target position
+            Log.d(TAG, "showSongs: 3 --- " + savedMediaItemIndex);
             scrollToPosition(savedMediaItemIndex);
 
             int savedPosition = 0;
