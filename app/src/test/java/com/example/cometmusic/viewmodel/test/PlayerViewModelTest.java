@@ -830,23 +830,6 @@ public class PlayerViewModelTest {
     }
 
     @Test
-    public void playerViewModel_WhenCurrentSongIndexIsNull_ReturnsDefaultValue() {
-
-        // call the method that should be tested
-        int currentSongIndex = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
-
-        assertEquals(currentSongIndex, -1);
-    }
-
-    @Test
-    public void playerViewModel_WhenCurrentSongIndexProvided_SetValueUpdatedCanBeRetrieved() {
-        // call the method that should be tested
-        playerViewModel.setCurrentSongIndex(100);
-
-        assertEquals((Object) playerViewModel.getCurrentSongIndex().getValue(), 100);
-    }
-
-    @Test
     public void playerViewModel_WithSessionTokenProvided_SetTokenValueUpdatedCanBeRetrieved() {
         SessionToken mockToken = mock(SessionToken.class);
 

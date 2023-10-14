@@ -49,9 +49,6 @@ public class PlayerViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> savedSongNotFound = new MutableLiveData<>();
 
     private final MutableLiveData<List<MediaItem>> mediaItems = new MutableLiveData<>();
-
-    private final MutableLiveData<Integer> currentSongIndex = new MutableLiveData<>();
-
     private final MutableLiveData<SessionToken> sessionToken = new MutableLiveData<>();
 
     // for prod
@@ -330,17 +327,6 @@ public class PlayerViewModel extends AndroidViewModel {
             throw new IllegalStateException(savedSongNotFoundVariableIsNull);
         }
         return savedSongNotFound;
-    }
-
-    public MutableLiveData<Integer> getCurrentSongIndex() {
-        if(currentSongIndex.getValue() == null) {
-            setCurrentSongIndex(-1);
-        }
-        return currentSongIndex;
-    }
-
-    public void setCurrentSongIndex(int currentSongIndex) {
-        this.currentSongIndex.setValue(currentSongIndex);
     }
 
     public MutableLiveData<SessionToken> getSessionToken() {

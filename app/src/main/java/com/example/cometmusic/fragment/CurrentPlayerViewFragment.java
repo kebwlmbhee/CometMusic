@@ -137,7 +137,7 @@ public class CurrentPlayerViewFragment extends Fragment {
 
                 playerViewModel.setPlayerMediaItems(playerViewModel.getPlayerMediaItems().getValue());
 
-                int index = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
+                int index = playerViewModel.getPlayerCurrentIndex();
                 long position = sharedData.getSongPosition() * 1000L;
                 playerViewModel.seekToSongIndexAndPosition(index, position);
 

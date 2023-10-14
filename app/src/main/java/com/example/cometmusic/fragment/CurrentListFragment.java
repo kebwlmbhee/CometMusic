@@ -420,14 +420,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             public void onMediaItemTransition(@NonNullApi MediaItem mediaItem, int reason) {
                 Player.Listener.super.onMediaItemTransition(mediaItem, reason);
 
-                int currentSongIndex = Objects.requireNonNull(playerViewModel.getCurrentSongIndex().getValue());
-
-                if(currentSongIndex != player.getCurrentMediaItemIndex()) {
-
-                    playerViewModel.setCurrentSongIndex(player.getCurrentMediaItemIndex());
-
-                    onSongTransition();
-                }
+                onSongTransition();
 
             }
 
