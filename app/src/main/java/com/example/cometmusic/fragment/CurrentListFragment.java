@@ -9,8 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -102,7 +100,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
     private FragmentCurrentListBinding mainBinding;
 
-    private final boolean DEV_MODE = false;
     MediaController player;
 
     private PlayerViewModel playerViewModel;
@@ -174,24 +171,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         thumbDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.scroll_thumb);
         trackDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.scroll_track);
 
-        if (DEV_MODE) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectCustomSlowCalls()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .penaltyDialog()
-                    .penaltyLog()
-                    .penaltyFlashScreen()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build());
-        }
-
         sharedData = new SharedData(requireContext());
 
 
@@ -230,6 +209,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         mainBinding.recyclerview.setRecycledViewPool(recycledViewPool);
 
         initializePlayer();
+
+        scrollToPosition(playerViewModel.getPlayerCurrentIndex());
 
         initializeObservers();
     }
@@ -405,21 +386,17 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // execute action
         Navigation.findNavController(requireView())
                 .navigate(R.id.action_currentListFragment_to_currentPlayerViewFragment);
-
-        Log.d(TAG, "showCurrentPlayerView: 1");
-        scrollToPosition(playerViewModel.getPlayerCurrentIndex());
     }
 
     private void scrollToPosition(int scrollPosition) {
+        if(songAdapter != null) {
+            songAdapter.setViewBorder(scrollPosition);
+        }
+
         if (scrollPosition < allSongs.size()) {
             mainBinding.recyclerview.scrollToPosition(scrollPosition);
         }
-        if(songAdapter != null) {
-            Log.d(TAG, "scrollToPosition: self");
-            songAdapter.setViewBorder(scrollPosition);
-            // make sure load image
-            songAdapter.notifyItemChanged(scrollPosition);
-        }
+
     }
 
     private void initializePlayerListener() {
@@ -586,7 +563,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             isReloadFolder = false;
 
             // scroll to target position
-            Log.d(TAG, "showSongs: 3 --- " + savedMediaItemIndex);
             scrollToPosition(savedMediaItemIndex);
 
             int savedPosition = 0;

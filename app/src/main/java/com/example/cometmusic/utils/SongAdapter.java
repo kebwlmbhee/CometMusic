@@ -139,6 +139,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 player.getCurrentMediaItem().mediaId.equals(String.valueOf(song.getUri()))) {
             if(cardView.getStrokeWidth() == 0) {
                 cardView.setStrokeWidth(8);
+                clearViewBorder(false);
             }
         }
         else if(cardView.getStrokeWidth() == 8){
@@ -179,6 +180,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             else {
                 player.pause();
                 player.seekTo(position, 0);
+                setViewBorder(position);
 
                 player.prepare();
                 player.play();
@@ -188,8 +190,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
     // fast setting border
     public void setViewBorder(int viewPosition) {
-        if(currentCardHolder != null)
-            currentCardHolder.setStrokeWidth(8);
 
         if(viewPosition >= 0 && viewPosition <= songs.size()) {
             // wait until recyclerView finish computation
