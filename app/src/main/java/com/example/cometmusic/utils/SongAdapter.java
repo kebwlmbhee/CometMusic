@@ -178,7 +178,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
             // if a song is currently playing and the user switches to a different song
             else {
-                player.pause();
                 player.seekTo(position, 0);
                 setViewBorder(position);
 
