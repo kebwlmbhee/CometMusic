@@ -82,6 +82,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
     private boolean isBackPressedToCloseTwice = false;
 
+    private int afterTransitionIndex = -1;
+
     SongAdapter songAdapter;
 
     Drawable thumbDrawable, trackDrawable;
@@ -420,7 +422,10 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             public void onMediaItemTransition(@NonNullApi MediaItem mediaItem, int reason) {
                 Player.Listener.super.onMediaItemTransition(mediaItem, reason);
 
-                onSongTransition();
+                if(afterTransitionIndex != playerViewModel.getPlayerCurrentIndex()) {
+                    onSongTransition();
+                    afterTransitionIndex = playerViewModel.getPlayerCurrentIndex();
+                }
 
             }
 
