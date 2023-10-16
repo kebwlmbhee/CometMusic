@@ -683,6 +683,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // release and prepare to reload player
         playerViewModel.clearPlayer();
 
+        firstLoadSavedSong = true;
+
         fetchSongs();
     }
 
