@@ -69,23 +69,20 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
         }
     }
 
+    // register broadcastReceiver
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
 
-        // register broadcastReceiver
-        if(closeActivityActionReceiver == null)
-            closeActivityActionReceiver = new CloseActivityActionReceiver();
+        closeActivityActionReceiver = new CloseActivityActionReceiver();
         IntentFilter closeActivityActionFilter = new IntentFilter(REQUEST_CLOSE_MAIN_ACTIVITY_ACTION);
         registerReceiver(closeActivityActionReceiver, closeActivityActionFilter);
 
-        if(changePlayerModeActionReceiver == null)
-            changePlayerModeActionReceiver = new ChangePlayerModeActionReceiver();
+        changePlayerModeActionReceiver = new ChangePlayerModeActionReceiver();
         IntentFilter changePlayerModeActionFilter = new IntentFilter(REQUEST_CHANGE_PLAYER_MODE_ACTION);
         registerReceiver(changePlayerModeActionReceiver, changePlayerModeActionFilter);
 
-        if(updatePlayPauseButtonActionReceiver == null)
-            updatePlayPauseButtonActionReceiver = new UpdatePlayPauseButtonActionReceiver();
+        updatePlayPauseButtonActionReceiver = new UpdatePlayPauseButtonActionReceiver();
         IntentFilter updatePlayPauseButtonActionFilter = new IntentFilter(REQUEST_UPDATE_PLAY_PAUSE_BUTTON_ACTION);
         registerReceiver(updatePlayPauseButtonActionReceiver, updatePlayPauseButtonActionFilter);
     }
@@ -96,23 +93,14 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
 
-
+    // avoid memory leak
     @Override
-    protected void onStop() {
-        // avoid memory leak
-        if(closeActivityActionReceiver != null) {
-            unregisterReceiver(closeActivityActionReceiver);
-            closeActivityActionReceiver = null;
-        }
-        if(changePlayerModeActionReceiver != null) {
-            unregisterReceiver(changePlayerModeActionReceiver);
-            changePlayerModeActionReceiver = null;
-        }
-        if(updatePlayPauseButtonActionReceiver != null) {
-            unregisterReceiver(updatePlayPauseButtonActionReceiver);
-            updatePlayPauseButtonActionReceiver = null;
-        }
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+
+        unregisterReceiver(closeActivityActionReceiver);
+        unregisterReceiver(changePlayerModeActionReceiver);
+        unregisterReceiver(updatePlayPauseButtonActionReceiver);
     }
 
     @Override
