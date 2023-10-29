@@ -131,7 +131,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         // set values to views
         viewHolder.binding.titleView.setText(song.getTitle());
-        viewHolder.binding.durationView.setText(getDuration(song.getDuration()));
+        int durationSecond = millisecondToSecond(song.getDuration());
+        viewHolder.binding.durationView.setText(getReadableDuration(durationSecond));
         viewHolder.binding.sizeView.setText(getSize(song.getSize()));
 
         // set and clear border, slow but stable
@@ -335,7 +336,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.isSearch = isSearch;
     }
 
-    public String getDuration(int totalDuration) {
+    public String getReadableDuration(int totalDuration) {
 
         String totalDurationText = "";
 
@@ -395,4 +396,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return fileSize;
     }
 
+    public int millisecondToSecond(long duration) {
+        final int oneSec = 1000;
+        return (int) (duration / oneSec);
+    }
 }

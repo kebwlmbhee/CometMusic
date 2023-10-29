@@ -14,13 +14,13 @@ public class Song {
     Uri uri;
     Uri artworkUri;
     int size;
-    int duration;
+    long duration;
 
     private static final MediaMetadataRetriever sRetriever = new MediaMetadataRetriever();
 
     // constructor
 
-    public Song(int playlistPosition, long id, String title, Uri uri, Uri artworkUri, int size, int duration) {
+    public Song(int playlistPosition, long id, String title, Uri uri, Uri artworkUri, int size, long duration) {
         this.playlistPosition = playlistPosition;
         this.id = id;
         this.title = title;
@@ -56,7 +56,7 @@ public class Song {
         return size;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 

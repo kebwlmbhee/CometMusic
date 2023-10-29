@@ -114,7 +114,7 @@ public class FetchAudioFiles {
                 // get the values of a column for a given audio file
                 long id = cursor.getLong(idColumn);
                 String name = cursor.getString(nameColumn);
-                int duration = cursor.getInt(durationColumn);
+                long duration = cursor.getInt(durationColumn);
                 int size = cursor.getInt(sizeColumn);
                 long albumId = cursor.getLong(albumColumn);
                 String data = cursor.getString(dataColumn);
