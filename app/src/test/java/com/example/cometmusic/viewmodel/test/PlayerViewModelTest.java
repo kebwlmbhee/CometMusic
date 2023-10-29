@@ -365,17 +365,48 @@ public class PlayerViewModelTest {
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(true);
 
-        long fakeDurationMillisecond = 1000;
+        long[] fakeDurationMillisecond = {40000, 60000};
 
-        when(mockPlayer.getDuration()).thenReturn(fakeDurationMillisecond);
+        List<Song> fakeSongs = new ArrayList<>();
+
+        MutableLiveData<List<Song>> fakeLiveDataSongs = new MutableLiveData<>();
+
+        fakeSongs.add(new Song(0, 123456, "Test1", Uri.parse("abc"), Uri.parse("efg"), 1024, fakeDurationMillisecond[0]));
+        fakeSongs.add(new Song(1, 789012, "Test2", Uri.parse("xyz"), Uri.parse("lmn"), 2048, fakeDurationMillisecond[1]));
+
+        fakeLiveDataSongs.setValue(fakeSongs);
+
+        when(partialMock.getSongs()).thenReturn(fakeLiveDataSongs);
+
+        int fakeCurrentMediaItemIndex = 0;
+
+        doReturn(fakeCurrentMediaItemIndex)
+                .when(mockPlayer)
+                .getCurrentMediaItemIndex();
 
         // call the method that should be tested
         partialMock.setDurationSecond();
 
-        int fakeDurationSecond = partialMock.millisecondToSecond(fakeDurationMillisecond);
+        int fakeDurationSecond = partialMock.millisecondToSecond(fakeDurationMillisecond[fakeCurrentMediaItemIndex]);
 
         assertEquals((Object) partialMock.getDurationSecond().getValue(), fakeDurationSecond);
         assertEquals(partialMock.getReadableDurationString().getValue(), partialMock.getReadableTime(fakeDurationSecond));
+
+        // one more again
+        fakeCurrentMediaItemIndex = 1;
+
+        doReturn(fakeCurrentMediaItemIndex)
+                .when(mockPlayer)
+                .getCurrentMediaItemIndex();
+
+        // call the method that should be tested
+        partialMock.setDurationSecond();
+
+        fakeDurationSecond = partialMock.millisecondToSecond(fakeDurationMillisecond[fakeCurrentMediaItemIndex]);
+
+        assertEquals((Object) partialMock.getDurationSecond().getValue(), fakeDurationSecond);
+        assertEquals(partialMock.getReadableDurationString().getValue(), partialMock.getReadableTime(fakeDurationSecond));
+
     }
 
     @Test
@@ -399,6 +430,7 @@ public class PlayerViewModelTest {
         assertEquals(toast.getDuration(), Toast.LENGTH_SHORT);
 
         String expectedText = ApplicationProvider.getApplicationContext().getString(R.string.can_not_find_current_second);
+
         String actualText = ShadowToast.getTextOfLatestToast();
 
         assertEquals(expectedText, actualText);
@@ -541,7 +573,7 @@ public class PlayerViewModelTest {
 
         verifyNoInteractions(mockPlayer);
 
-        verify(partialMock, never()).checkIsPlaying();
+        verify(partialMock, never()).getIsPlaying();
     }
 
     @Test
@@ -553,7 +585,7 @@ public class PlayerViewModelTest {
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(true);
 
-        when(partialMock.getIsPlaying()).thenReturn(new MutableLiveData<>(true));
+        when(partialMock.getIsPlaying()).thenReturn(true);
 
         // call the method that should be tested
         partialMock.clickPlayPauseBtn();
@@ -571,7 +603,7 @@ public class PlayerViewModelTest {
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(true);
 
-        when(partialMock.getIsPlaying()).thenReturn(new MutableLiveData<>(false));
+        when(partialMock.getIsPlaying()).thenReturn(false);
 
         // call the method that should be tested
         partialMock.clickPlayPauseBtn();
@@ -579,59 +611,6 @@ public class PlayerViewModelTest {
         verify(mockPlayer, times(1)).play();
 
         verify(mockPlayer, never()).pause();
-    }
-
-    @Test
-    public void playerViewModel_GetIsPlayingWithIsPlayingIsNull_CallsCheckIsPlaying() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
-
-        // call the method that should be tested
-        partialMock.getIsPlaying();
-
-        verify(partialMock, times(1)).checkIsPlaying();
-    }
-
-    @Test
-    public void playerViewModel_CheckIsPlayingWithIsPlayerExistMediaItemFalse_DoesNotSetIsPlaying() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
-
-        partialMock.setPlayer(mockPlayer);
-
-        when(partialMock.isPlayerExistMediaItem()).thenReturn(false);
-
-        // call the method that should be tested
-        partialMock.checkIsPlaying();
-
-        verify(mockPlayer, never()).isPlaying();
-
-        // cause checkIsPlaying not set isPlaying value
-        assertNull(partialMock.getIsPlaying().getValue());
-    }
-
-    @Test
-    public void playerViewModel_CheckIsPlayingWithIsPlayingNotNull_ReturnsCurrentValue() {
-
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
-
-        when(partialMock.isPlayerExistMediaItem()).thenReturn(true);
-
-        partialMock.setPlayer(mockPlayer);
-
-        when(mockPlayer.isPlaying()).thenReturn(false);
-
-        // call the method that should be tested
-        partialMock.checkIsPlaying();
-
-        // call the method that should be tested
-        assertEquals(Boolean.FALSE, partialMock.getIsPlaying().getValue());
-
-        when(mockPlayer.isPlaying()).thenReturn(true);
-
-        // call the method that should be tested
-        partialMock.checkIsPlaying();
-
-        // call the method that should be tested
-        assertEquals(Boolean.TRUE, partialMock.getIsPlaying().getValue());
     }
 
     @Test

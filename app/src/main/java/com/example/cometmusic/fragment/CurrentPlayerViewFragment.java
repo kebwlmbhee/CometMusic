@@ -24,7 +24,6 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.NonNullApi;
-import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import androidx.navigation.NavController;
@@ -44,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CurrentPlayerViewFragment extends Fragment {
 
+    private static final String TAG = "MyTag";
     private FragmentCurrentPlayerViewBinding playerViewBinding;
 
     private PlayerViewModel playerViewModel;
@@ -57,6 +57,7 @@ public class CurrentPlayerViewFragment extends Fragment {
     private Player.Listener playerListener;
     private SessionToken sessionToken;
     private ListenableFuture<MediaController> mediaControllerFuture;
+    List<Song> songs;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +104,8 @@ public class CurrentPlayerViewFragment extends Fragment {
         // song name marquee
         playerViewBinding.songNameView.setSelected(true);
 
+        songs = Objects.requireNonNull(playerViewModel.getSongs().getValue());
+
         initializeObservers();
 
         setClickAndTouchEvent();
@@ -111,7 +114,8 @@ public class CurrentPlayerViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        playerViewModel.checkIsPlaying();
+        if(playerViewModel.getPlayerOrNull().getValue() != null)
+            isPlayingOrNot(playerViewModel.getIsPlaying());
     }
 
     @Override
@@ -136,6 +140,7 @@ public class CurrentPlayerViewFragment extends Fragment {
                 playerViewModel.setPlayer(player);
 
                 playerViewModel.setPlayerMediaItems(playerViewModel.getPlayerMediaItems().getValue());
+                isPlayingOrNot(player.isPlaying());
 
                 int index = playerViewModel.getPlayerCurrentIndex();
                 long position = sharedData.getSongPosition() * 1000L;
@@ -151,17 +156,6 @@ public class CurrentPlayerViewFragment extends Fragment {
     }
 
     private void initializeObservers() {
-        playerViewModel.getIsPlaying().observe(getViewLifecycleOwner(), isPlaying -> {
-            if(isPlaying && playerViewModel.isPlayerExistMediaItem()) {
-                startUpdatingProgress();
-                updatePauseToPlayUI();
-            }
-            else {
-                stopUpdatingProgress();
-                updatePlayToPauseUI();
-            }
-        });
-
         playerViewModel.getPlayerMode().observe(getViewLifecycleOwner(), playerMode -> {
             switch (playerMode) {
                 case 2:
@@ -206,7 +200,7 @@ public class CurrentPlayerViewFragment extends Fragment {
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 Player.Listener.super.onIsPlayingChanged(isPlaying);
-                playerViewModel.checkIsPlaying();
+                isPlayingOrNot(isPlaying);
             }
 
             // just for update UI, cuz player is buffering
@@ -221,12 +215,19 @@ public class CurrentPlayerViewFragment extends Fragment {
             @Override
             public void onPlaybackStateChanged(int playbackState) {
                 Player.Listener.super.onPlaybackStateChanged(playbackState);
-
-                if (playbackState == ExoPlayer.STATE_READY) {
-                    handlePlayerUI();
-                }
             }
         };
+    }
+
+    private void isPlayingOrNot(boolean isPlaying) {
+        if(isPlaying) {
+            startUpdatingProgress();
+            updatePauseToPlayUI();
+        }
+        else {
+            stopUpdatingProgress();
+            updatePlayToPauseUI();
+        }
     }
 
     private void onSongTransition() {
@@ -234,7 +235,7 @@ public class CurrentPlayerViewFragment extends Fragment {
         if(!playerViewModel.isPlayerExistMediaItem())
             return;
 
-        playerViewModel.setCurrentSongName();
+        handlePlayerUI();
 
         // if it is after onAttach and before onDetach
         if(isAdded()) {
@@ -246,13 +247,11 @@ public class CurrentPlayerViewFragment extends Fragment {
 
         // set the song duration in seconds
         playerViewModel.setDurationSecond();
-
-        playerViewBinding.durationView.setText(playerViewModel.getReadableDurationString().getValue());
-
         // set the song current position in seconds
         playerViewModel.setCurrentSecond();
 
-        playerViewModel.checkIsPlaying();
+        playerViewModel.setCurrentSongName();
+
     }
 
     public void updateCurrentPlayingCover(int position) {
@@ -267,7 +266,7 @@ public class CurrentPlayerViewFragment extends Fragment {
     }
 
     public Bitmap getCurrentPlayingCover(int position) {
-        List<Song> songs = Objects.requireNonNull(playerViewModel.getSongs().getValue());
+//        List<Song> songs = Objects.requireNonNull(playerViewModel.getSongs().getValue());
         if (position >= 0 && position < songs.size()) {
             Song song = songs.get(position);
             return song.getCoverImage(requireContext());
@@ -404,8 +403,7 @@ public class CurrentPlayerViewFragment extends Fragment {
         public void run() {
             // if user scroll song seekBar, then don't update progress and progressView text
             // let user feel free to scroll
-            if (Boolean.TRUE.equals(playerViewModel.getIsPlaying().getValue()) &&
-                    !isSeekbarBeingTouched) {
+            if (playerViewModel.getIsPlaying() && !isSeekbarBeingTouched) {
                 playerViewModel.setCurrentSecond();
             }
             // schedule the next update task
