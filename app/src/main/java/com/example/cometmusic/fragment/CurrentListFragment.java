@@ -219,6 +219,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
                 // store the player to the viewModel
                 player = mediaControllerFuture.get();
                 playerViewModel.setPlayer(player);
+                isPlayingOrNot(player.isPlaying());
                 fetchSongs();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -335,7 +336,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     @Override
     public void onResume() {
         super.onResume();
-        playerViewModel.checkIsPlaying();
+        if(playerViewModel.getPlayerOrNull().getValue() != null)
+            isPlayingOrNot(playerViewModel.getIsPlaying());
     }
 
     private void filterSongs(String query) {
@@ -399,12 +401,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 Player.Listener.super.onIsPlayingChanged(isPlaying);
-                if(isPlaying) {
-                    updatePauseToPlayUI();
-                }
-                else {
-                    updatePlayToPauseUI();
-                }
+                isPlayingOrNot(isPlaying);
             }
 
             // just for update UI, cuz player is buffering
@@ -427,6 +424,15 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         };
     }
 
+    private void isPlayingOrNot(boolean isPlaying) {
+        if(isPlaying) {
+            updatePauseToPlayUI();
+        }
+        else {
+            updatePlayToPauseUI();
+        }
+    }
+
 
     private void onSongTransition() {
 
@@ -438,7 +444,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         }
 
         handlePlayerUI();
-//        playerViewModel.checkIsPlaying();
     }
 
 
@@ -453,8 +458,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // set current border
         if(songAdapter != null)
             songAdapter.setViewBorder(playerViewModel.getPlayerCurrentIndex());
-
-        playerViewModel.checkIsPlaying();
     }
 
     public void updatePauseToPlayUI() {
@@ -659,7 +662,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     // if it is not playing, then play
     @Override
     public void onSameItemClicked() {
-        if(Boolean.FALSE.equals((playerViewModel.getIsPlaying()).getValue())) {
+        if(playerViewModel.getIsPlaying()) {
             playerViewModel.clickPlayPauseBtn();
         }
     }

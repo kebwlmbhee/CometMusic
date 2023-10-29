@@ -42,8 +42,6 @@ public class PlayerViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> currentSongName = new MutableLiveData<>();
 
-    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
-
     private final MutableLiveData<List<Song>> songs = new MutableLiveData<>();
     
     private final MutableLiveData<Boolean> savedSongNotFound = new MutableLiveData<>();
@@ -164,10 +162,13 @@ public class PlayerViewModel extends AndroidViewModel {
     public void setDurationSecond() {
         if(!isPlayerExistMediaItem())
             return;
+
+        int currentIndex = Objects.requireNonNull(getPlayer().getValue()).getCurrentMediaItemIndex();
+
         durationSecond.setValue(
-                millisecondToSecond(Objects.requireNonNull(
-                        getPlayer().getValue()
-                ).getDuration())
+                millisecondToSecond(
+                        Objects.requireNonNull(getSongs().getValue()).get(currentIndex)
+                                .getDuration())
         );
         String durationReadableString = getReadableTime(Objects.requireNonNull(durationSecond.getValue()));
         readableDurationString.setValue(durationReadableString);
@@ -242,29 +243,17 @@ public class PlayerViewModel extends AndroidViewModel {
             return;
 
         // from play to pause
-        if (Boolean.TRUE.equals(getIsPlaying().getValue())) {
+        if (getIsPlaying()) {
             Objects.requireNonNull(getPlayer().getValue()).pause();
         }
         // from pause to play
         else {
             Objects.requireNonNull(getPlayer().getValue()).play();
         }
-
-        checkIsPlaying();
     }
 
-    public void checkIsPlaying() {
-        if(!isPlayerExistMediaItem())
-            return;
-        // check current status is playing or is not playing
-        isPlaying.setValue(Objects.requireNonNull(getPlayer().getValue()).isPlaying());
-    }
-
-    public MutableLiveData<Boolean> getIsPlaying() {
-        if(isPlaying.getValue() == null) {
-            checkIsPlaying();
-        }
-        return isPlaying;
+    public boolean getIsPlaying() {
+        return Objects.requireNonNull(getPlayer().getValue()).isPlaying();
     }
 
     public void setPlayerMediaItems(List<MediaItem> mediaItems) {
