@@ -266,7 +266,6 @@ public class CurrentPlayerViewFragment extends Fragment {
     }
 
     public Bitmap getCurrentPlayingCover(int position) {
-//        List<Song> songs = Objects.requireNonNull(playerViewModel.getSongs().getValue());
         if (position >= 0 && position < songs.size()) {
             Song song = songs.get(position);
             return song.getCoverImage(requireContext());

@@ -73,8 +73,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 @UnstableApi public class CurrentListFragment extends Fragment
         implements SongAdapter.PlayerControlListener {
 
-
-    private static final String TAG = "MyTag";
     private int savedMediaItemIndex = 0;
 
     private boolean isBackPressedToCloseTwice = false;
@@ -661,6 +659,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         if(!playerViewModel.getIsPlaying()) {
             playerViewModel.clickPlayPauseBtn();
         }
+        showCurrentPlayerView();
     }
 
     @Override
