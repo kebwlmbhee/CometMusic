@@ -42,7 +42,6 @@ import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.NonNullApi;
 import androidx.media3.common.util.UnstableApi;
-import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 import androidx.navigation.Navigation;
@@ -77,8 +76,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
     private static final String TAG = "MyTag";
     private int savedMediaItemIndex = 0;
-
-    private boolean firstLoadSavedSong = true;
 
     private boolean isBackPressedToCloseTwice = false;
 
@@ -214,7 +211,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         scrollToPosition(playerViewModel.getPlayerCurrentIndex());
 
-        initializeObservers();
     }
 
     private void initializePlayer() {
@@ -313,17 +309,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         isKeyboardVisible = false;
     }
 
-    private void initializeObservers() {
-        playerViewModel.getIsPlaying().observe(getViewLifecycleOwner(), isPlaying -> {
-            if(isPlaying) {
-                updatePauseToPlayUI();
-            }
-            else {
-                updatePlayToPauseUI();
-            }
-        });
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -414,7 +399,12 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
                 Player.Listener.super.onIsPlayingChanged(isPlaying);
-                playerViewModel.checkIsPlaying();
+                if(isPlaying) {
+                    updatePauseToPlayUI();
+                }
+                else {
+                    updatePlayToPauseUI();
+                }
             }
 
             // just for update UI, cuz player is buffering
@@ -429,15 +419,10 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
             }
 
-            // handle play status
             @Override
             public void onPlaybackStateChanged(int playbackState) {
                 Player.Listener.super.onPlaybackStateChanged(playbackState);
 
-                if (playbackState == ExoPlayer.STATE_READY) {
-
-                    handlePlayerUI();
-                }
             }
         };
     }
@@ -448,36 +433,26 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         if(!playerViewModel.isPlayerExistMediaItem())
             return;
 
-        playerViewModel.setCurrentSongName();
-
-        scrollToPosition(player.getCurrentMediaItemIndex());
-
         if (songAdapter != null) {
             songAdapter.clearViewBorder(false);
         }
 
-        playerViewModel.checkIsPlaying();
+        handlePlayerUI();
+//        playerViewModel.checkIsPlaying();
     }
 
 
 
     private void handlePlayerUI() {
+        // scroll to target position
+        scrollToPosition(playerViewModel.getPlayerCurrentIndex());
 
-        // set the song duration in seconds
-        playerViewModel.setDurationSecond();
+        // set song name
+        playerViewModel.setCurrentSongName();
 
-        // set the song current position in seconds
-        playerViewModel.setCurrentSecond();
-
-        if (firstLoadSavedSong) {
-            // set song name
-            playerViewModel.setCurrentSongName();
-
-            // set current border
-            // first load not trigger onMediaItemTransition
+        // set current border
+        if(songAdapter != null)
             songAdapter.setViewBorder(playerViewModel.getPlayerCurrentIndex());
-            firstLoadSavedSong = false;
-        }
 
         playerViewModel.checkIsPlaying();
     }
@@ -499,6 +474,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         if (allSongs != null) {
             savedMediaItemIndex = playerViewModel.getSavedMediaItemIndex();
         }
+
+        // songs adapter
+        songAdapter = new SongAdapter(requireContext(), player, allSongs, mainBinding.recyclerview);
 
         showSongs();
     }
@@ -540,9 +518,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         // song name marquee
         mainBinding.homeSongNameView.setSelected(true);
 
-        // songs adapter
-        songAdapter = new SongAdapter(requireContext(), player, allSongs, mainBinding.recyclerview);
-
         mainBinding.recyclerview.setItemViewCacheSize(100);
 
         // implement PlayerControllerListener interface
@@ -574,12 +549,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             playerViewModel.seekToSongIndexAndPosition(savedMediaItemIndex, savedPosition * 1000L);
 
             playerViewModel.preparePlayer();
-
-            // set the song duration in seconds
-            playerViewModel.setDurationSecond();
-
-            // set the song current position in seconds
-            playerViewModel.setCurrentSecond();
         }
         /*
           if the users open the app with the service running (without reload folder)
@@ -588,8 +557,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         else {
             playerViewModel.preparePlayer();
 
-            // scroll to target position
-            scrollToPosition(playerViewModel.getPlayerCurrentIndex());
+
 
             handlePlayerUI();
         }
@@ -682,8 +650,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
 
         // release and prepare to reload player
         playerViewModel.clearPlayer();
-
-        firstLoadSavedSong = true;
 
         fetchSongs();
     }
