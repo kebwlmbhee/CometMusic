@@ -340,13 +340,12 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         String totalDurationText = "";
 
-        int oneHr = 1000 * 60 * 60;
-        int oneMin = 1000 * 60;
-        int oneSec = 1000;
+        int oneHr = 60 * 60;
+        int oneMin = 60;
 
         int hrs = totalDuration / oneHr;
         int mins = (totalDuration % oneHr) / oneMin;
-        int secs = (totalDuration % oneMin) / oneSec;
+        int secs = (totalDuration % oneMin);
         // at least display 1 sec
         secs = Math.max(secs, 1);
 
