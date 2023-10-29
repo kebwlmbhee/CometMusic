@@ -229,8 +229,7 @@ public class PlaybackService extends MediaSessionService {
                     break;
                 case CUSTOM_COMMAND_CLOSE_NOTIFICATION:
                     closeNotificationActionBroadcast();
-                    return Futures.immediateFuture(
-                            new SessionResult(SessionResult.RESULT_SUCCESS));
+                    break;
             }
             mediaSession.setSessionActivity(openMainActivityPendingIntent(servicePlayerMode));
 
