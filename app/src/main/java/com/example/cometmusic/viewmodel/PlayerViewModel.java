@@ -331,15 +331,15 @@ public class PlayerViewModel extends AndroidViewModel {
         return (int) (duration / oneSec);
     }
 
-    public String getReadableTime(int duration) {
+    public String getReadableTime(int durationSecond) {
         String time = "";
 
         final int oneHr = 60 * 60;
         final int oneMin = 60;
 
-        int hrs = duration / oneHr;
-        int mins = (duration % oneHr) / oneMin;
-        int secs = (duration % oneMin);
+        int hrs = durationSecond / oneHr;
+        int mins = (durationSecond % oneHr) / oneMin;
+        int secs = (durationSecond % oneMin);
 
         if (hrs >= 1) {
             time += String.format(Locale.getDefault(), "%02d:", hrs);
