@@ -516,8 +516,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
             isServiceAlreadyRunning = true;
         }
 
-        // open player view when click home control wrapper
-
         // song name marquee
         mainBinding.homeSongNameView.setSelected(true);
 
@@ -559,8 +557,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
          */
         else {
             playerViewModel.preparePlayer();
-
-
 
             handlePlayerUI();
         }
@@ -662,7 +658,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     // if it is not playing, then play
     @Override
     public void onSameItemClicked() {
-        if(playerViewModel.getIsPlaying()) {
+        if(!playerViewModel.getIsPlaying()) {
             playerViewModel.clickPlayPauseBtn();
         }
     }
