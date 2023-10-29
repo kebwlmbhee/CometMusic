@@ -26,8 +26,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
 
     private ChangePlayerModeActionReceiver changePlayerModeActionReceiver;
 
-    private UpdatePlayPauseButtonActionReceiver updatePlayPauseButtonActionReceiver;
-
     private PlayerViewModel playerViewModel;
 
     @Override
@@ -60,15 +58,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
         }
     }
 
-    public class UpdatePlayPauseButtonActionReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(REQUEST_UPDATE_PLAY_PAUSE_BUTTON_ACTION)) {
-                playerViewModel.checkIsPlaying();
-            }
-        }
-    }
-
     // register broadcastReceiver
     @Override
     protected void onResume() {
@@ -81,10 +70,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
         changePlayerModeActionReceiver = new ChangePlayerModeActionReceiver();
         IntentFilter changePlayerModeActionFilter = new IntentFilter(REQUEST_CHANGE_PLAYER_MODE_ACTION);
         registerReceiver(changePlayerModeActionReceiver, changePlayerModeActionFilter);
-
-        updatePlayPauseButtonActionReceiver = new UpdatePlayPauseButtonActionReceiver();
-        IntentFilter updatePlayPauseButtonActionFilter = new IntentFilter(REQUEST_UPDATE_PLAY_PAUSE_BUTTON_ACTION);
-        registerReceiver(updatePlayPauseButtonActionReceiver, updatePlayPauseButtonActionFilter);
     }
 
     @Override
@@ -100,7 +85,6 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
 
         unregisterReceiver(closeActivityActionReceiver);
         unregisterReceiver(changePlayerModeActionReceiver);
-        unregisterReceiver(updatePlayPauseButtonActionReceiver);
     }
 
     @Override

@@ -40,14 +40,12 @@ import java.util.List;
 @UnstableApi
 public class PlaybackService extends MediaSessionService {
 
-    private final String TAG = "MyTag";
     private MediaSession mediaSession;
     ImmutableList.Builder<CommandButton> commandButtons;
     SharedData sharedData;
 
     // player
     ExoPlayer player;
-    private final String CUSTOM_COMMAND_PLAY_PAUSE = "play/pause";
     private final String CUSTOM_COMMAND_REPEAT_ALL = "repeatAll";
     private final String CUSTOM_COMMAND_REPEAT_ONE = "repeatOne";
     private final String CUSTOM_COMMAND_SHUFFLE = "randomShuffle";
@@ -209,8 +207,6 @@ public class PlaybackService extends MediaSessionService {
         @Override
         public ListenableFuture<SessionResult> onCustomCommand(@NonNull MediaSession session, @NonNull MediaSession.ControllerInfo controller, SessionCommand customCommand, @NonNull Bundle args) {
             switch (customCommand.customAction) {
-                case CUSTOM_COMMAND_PLAY_PAUSE:
-                    updatePlayPauseButtonBroadcast();
                 // repeat all -> repeat one
                 case CUSTOM_COMMAND_REPEAT_ALL:
                     changeModeActionBroadcast(2);
@@ -250,11 +246,6 @@ public class PlaybackService extends MediaSessionService {
 
             sendBroadcast(intent);
             stopSelf();
-        }
-
-        private void updatePlayPauseButtonBroadcast() {
-            Intent intent = new Intent(MainActivity.REQUEST_CLOSE_MAIN_ACTIVITY_ACTION);
-            sendBroadcast(intent);
         }
 
         private void changeModeActionBroadcast(int mode) {
@@ -352,7 +343,6 @@ public class PlaybackService extends MediaSessionService {
 
         CommandButton playPausesCommandButton = new CommandButton.Builder()
                 .setPlayerCommand(Player.COMMAND_PLAY_PAUSE)
-                .setDisplayName(CUSTOM_COMMAND_PLAY_PAUSE)
                 .setEnabled(true)
                 .setIconResId(mediaSession.getPlayer().isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play)
                 .build();
