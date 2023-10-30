@@ -21,7 +21,7 @@
     <string name="same_as_the_current_main_music_folder">與當前主音樂資料夾相同</string>
     <string name="Tiramisu_or_above_permission_message_1">1. 允許讀取和寫入媒體</string>
     <string name="Tiramisu_or_above_permission_message_2">2. 允許讀取圖片</string>
-    <string name="less_than_Tiramisu_permission_message">允許讀讀與寫入媒體與圖片</string>
+    <string name="less_than_Tiramisu_permission_message">允許讀取與寫入媒體與圖片</string>
     <string name="cancel">拒絕</string>
     <string name="allow">允許</string>
     <string name="requesting_permission">要求權限</string>
