@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.cometmusic.R;
-import com.example.cometmusic.factory.buildversion.BuildVersionImpl;
+import com.example.cometmusic.testUtils.buildversion.BuildVersionImpl;
 import com.example.cometmusic.fragment.CheckPermissionFragment;
 import com.example.cometmusic.model.SharedData;
 
