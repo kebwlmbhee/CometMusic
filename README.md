@@ -1,6 +1,6 @@
 # CometMusic
 
-## ScreenShots
+## Screenshots
 
 | HomePage | CurrentSongPage | Service |
 | -------- | --------------- | ------- |
