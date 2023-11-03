@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemSpacingDecoration extends RecyclerView.ItemDecoration {
 
+    public final int itemBottomSpace = 2;
+
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
@@ -16,7 +18,7 @@ public class ItemSpacingDecoration extends RecyclerView.ItemDecoration {
 
         // apply spacing to the bottom of each item
         if(position != RecyclerView.NO_POSITION) {
-            outRect.bottom = 2;
+            outRect.bottom = itemBottomSpace;
         }
     }
 }
