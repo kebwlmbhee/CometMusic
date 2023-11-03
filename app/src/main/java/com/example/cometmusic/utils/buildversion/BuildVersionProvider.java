@@ -1,4 +1,4 @@
-package com.example.cometmusic.testUtils.buildversion;
+package com.example.cometmusic.utils.buildversion;
 
 public interface BuildVersionProvider {
     public boolean isTiramisuOrAbove();
