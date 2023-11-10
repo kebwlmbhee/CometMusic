@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.databinding.DataBindingUtil;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Priority;
 import com.example.cometmusic.R;
 import com.example.cometmusic.databinding.SongRowItemBinding;
 import com.example.cometmusic.model.Song;
+import com.example.cometmusic.utils.factory.GlideProvider;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.DecimalFormat;
@@ -30,6 +32,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final int LoadCoverImageAfterStopScrollingMillisecond = 3000;
+
 
     private boolean isScrolling = false;
 
@@ -41,14 +46,16 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Handler viewBorderHolder = new Handler();
 
-    private final Handler countTimeHandler = new Handler();
+    private Handler countTimeHandler = new Handler();
 
     // members
-    Context context;
-    List<Song> songs;
-    LinearLayoutManager layoutManager;
+    private Context context;
+    private List<Song> songs;
+    private LinearLayoutManager layoutManager;
 
-    int start = 0, end = 0;
+    private GlideProvider glideProvider;
+
+    private int start = 0, end = 0;
     RecyclerView recyclerView;
 
     MediaController player;
@@ -57,28 +64,86 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     boolean isSearch = false;
 
-    // constructor
-    public SongAdapter(Context context, MediaController player, List<Song> songs, RecyclerView recyclerView) {
+    // constructor for prod
+    public SongAdapter(Context context, MediaController player, List<Song> songs,
+                       RecyclerView recyclerView, GlideProvider glideProvider) {
         this.context = context;
         this.player = player;
         this.songs = songs;
         this.recyclerView = recyclerView;
-        setHasStableIds(true);
         layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        this.glideProvider = glideProvider;
+    }
+
+    @VisibleForTesting
+    public void setScrolling(boolean isScrolling) {
+        this.isScrolling = isScrolling;
+    }
+
+    @VisibleForTesting
+    public boolean getScrolling() {
+        return isScrolling;
+    }
+
+    @VisibleForTesting
+    public void setCurrentCardHolder(MaterialCardView cardHolder) {
+        currentCardHolder = cardHolder;
+    }
+
+    @VisibleForTesting
+    public MaterialCardView getCurrentCardHolder() {
+        return currentCardHolder;
+    }
+
+    @VisibleForTesting
+    public void setPreviousCardHolder(MaterialCardView cardHolder) {
+        previousCardHolder = cardHolder;
+    }
+
+    @VisibleForTesting
+    public MaterialCardView getPreviousCardHolder() {
+        return previousCardHolder;
+    }
+
+    @VisibleForTesting
+    public void setCurrentIndex(int index) {
+        currentIndex = index;
+    }
+    @VisibleForTesting
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+    @VisibleForTesting
+    public void setPreviousIndex(int index) {
+        previousIndex = index;
+    }
+
+    @VisibleForTesting
+    public int getPreviousIndex() {
+        return previousIndex;
+    }
+
+    @VisibleForTesting
+    public void setCountTimeHandler(Handler handler) {
+        countTimeHandler = handler;
+    }
+
+    @VisibleForTesting
+    public Handler getCountTimeHandler() {
+        return countTimeHandler;
     }
 
     public void startCountdownTimer() {
         isScrolling = true;
         // remove previous count time handler
         countTimeHandler.removeCallbacksAndMessages(null);
-        int loadCoverImageAfterStopScrollingMillisecond = 3000;
         countTimeHandler.postDelayed(() -> {
             isScrolling = false;
             showVisibleBitmaps();
-        }, loadCoverImageAfterStopScrollingMillisecond);
+        }, LoadCoverImageAfterStopScrollingMillisecond);
     }
 
-    private void showVisibleBitmaps() {
+    public void showVisibleBitmaps() {
         // if scrolling has stopped, trigger image loading
         // calculate start and end
         start = Math.max(layoutManager.findFirstVisibleItemPosition(), 0);
@@ -88,7 +153,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void clearImageCache() {
-        Glide.get(context).clearMemory();
+        glideProvider.getGlideInstance(context).clearMemory();
     }
 
     public interface PlayerControlListener {
@@ -153,7 +218,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         // on item click
-        viewHolder.itemView.setOnClickListener(view -> {
+        cardView.setOnClickListener(view -> {
             if (player == null) {
                 return;
             }

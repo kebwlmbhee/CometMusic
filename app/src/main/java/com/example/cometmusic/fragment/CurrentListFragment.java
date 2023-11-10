@@ -55,6 +55,7 @@ import com.example.cometmusic.model.Song;
 import com.example.cometmusic.service.PlaybackService;
 import com.example.cometmusic.utils.ItemSpacingDecoration;
 import com.example.cometmusic.utils.SongAdapter;
+import com.example.cometmusic.utils.factory.GlideProvider;
 import com.example.cometmusic.viewmodel.PlayerViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -108,6 +109,7 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
     private boolean isReloadFolder = false;
 
     private boolean isKeyboardVisible = false;
+    private GlideProvider glideProvider;
 
     public CurrentListFragment() {
         super(R.layout.fragment_current_list);
@@ -168,6 +170,8 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         thumbDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.scroll_thumb);
         trackDrawable = AppCompatResources.getDrawable(requireContext(), R.drawable.scroll_track);
 
+        glideProvider = new GlideProvider();
+
         sharedData = new SharedData(requireContext());
 
 
@@ -208,7 +212,6 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         initializePlayer();
 
         scrollToPosition(playerViewModel.getPlayerCurrentIndex());
-
     }
 
     private void initializePlayer() {
@@ -477,7 +480,9 @@ import me.zhanghai.android.fastscroll.PopupTextProvider;
         }
 
         // songs adapter
-        songAdapter = new SongAdapter(requireContext(), player, allSongs, mainBinding.recyclerview);
+        songAdapter = new SongAdapter(requireContext(), player, allSongs, mainBinding.recyclerview, glideProvider);
+
+        songAdapter.setHasStableIds(true);
 
         showSongs();
     }
