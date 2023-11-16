@@ -21,28 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <androidx.appcompat.widget.Toolbar-->
-<!--                android:id="@+id/toolbar"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                app:menu="@menu/toolbar_layout"-->
-<!--                app:titleTextColor="?attr/colorOnPrimary">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/toolbar_title"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="start|center_vertical"-->
-<!--                    android:text="@string/app_name"-->
-<!--                    android:textColor="?attr/colorSecondary"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--            </androidx.appcompat.widget.Toolbar>-->
-
-
         </com.google.android.material.appbar.AppBarLayout>
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/homeControlWrapper"
