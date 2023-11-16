@@ -33,7 +33,9 @@ import java.util.Objects;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int LoadCoverImageAfterStopScrollingMillisecond = 3000;
+    public static final int LOAD_COVER_IMAGE_AFTER_STOP_SCROLLING_MILLISECOND = 3000;
+
+    public final static int DELAY_BETWEEN_ITEMS_MILLISECOND = 100;
 
 
     private boolean isScrolling = false;
@@ -48,14 +50,16 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Handler countTimeHandler = new Handler();
 
+    private final Handler backgroundHandler = new Handler();
+
+
     // members
-    private Context context;
+    private final Context context;
     private List<Song> songs;
-    private LinearLayoutManager layoutManager;
+    private final LinearLayoutManager layoutManager;
 
-    private GlideProvider glideProvider;
+    private final GlideProvider glideProvider;
 
-    private int start = 0, end = 0;
     RecyclerView recyclerView;
 
     MediaController player;
@@ -133,6 +137,11 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return countTimeHandler;
     }
 
+    @VisibleForTesting
+    public PlayerControlListener getPlayerControllerListener() {
+        return playerControlListener;
+    }
+
     public void startCountdownTimer() {
         isScrolling = true;
         // remove previous count time handler
@@ -140,16 +149,32 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         countTimeHandler.postDelayed(() -> {
             isScrolling = false;
             showVisibleBitmaps();
-        }, LoadCoverImageAfterStopScrollingMillisecond);
+        }, LOAD_COVER_IMAGE_AFTER_STOP_SCROLLING_MILLISECOND);
     }
 
     public void showVisibleBitmaps() {
         // if scrolling has stopped, trigger image loading
         // calculate start and end
-        start = Math.max(layoutManager.findFirstVisibleItemPosition(), 0);
-        end = layoutManager.findLastVisibleItemPosition();
-        for (int i = start; i <= end; ++i)
-            notifyItemChanged(i);
+        int start = Math.max(layoutManager.findFirstVisibleItemPosition(), 0);
+        int end = layoutManager.findLastVisibleItemPosition();
+        notifyItemsChangedOneByOne(start, end);
+    }
+
+    private void notifyItemsChangedOneByOne(final int start, final int end) {
+        Runnable runnable = new Runnable() {
+            private int currentPosition = start;
+
+            public void run() {
+                if (currentPosition <= end) {
+                    notifyItemChanged(currentPosition);
+                    backgroundHandler.postDelayed(this, DELAY_BETWEEN_ITEMS_MILLISECOND);
+                    ++currentPosition;
+                }
+            }
+        };
+
+        // trigger runnable
+        backgroundHandler.post(runnable);
     }
 
     public void clearImageCache() {
@@ -217,12 +242,16 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             loadCoverImageWithGlide(viewHolder, song);
         }
 
-        // on item click
-        cardView.setOnClickListener(view -> {
-            if (player == null) {
-                return;
-            }
+        // when item click
+        onCardViewClicked(position, song, cardView);
+    }
 
+    public void onCardViewClicked(int position, Song song, MaterialCardView cardView) {
+        if (player == null) {
+            return;
+        }
+
+        cardView.setOnClickListener(view -> {
 
             // when user click search result
             if (isSearch) {
@@ -253,12 +282,13 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             playerControlListener.collapseActionView();
         });
     }
+
     // fast setting border
     public void setViewBorder(int viewPosition) {
 
         if(viewPosition >= 0 && viewPosition <= songs.size()) {
-            // wait until recyclerView finish computation
 
+            // ensure the following code is posted to the main thread
             recyclerView.post(() -> {
                 // clear previous border
                 previousCardHolder = currentCardHolder;
