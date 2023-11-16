@@ -10,9 +10,8 @@
 
     <style name="Theme.CometMusic" parent="Base.Theme.CometMusic">
         <item name="colorPrimary">@color/white</item>
-        <item name="colorOnPrimary">@color/gray</item>
         <item name="colorSecondary">@color/dark</item>
-        <item name="colorOnSecondary">@color/soft_green</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="selectableItemBackground">@color/light_green</item>
     </style>
 

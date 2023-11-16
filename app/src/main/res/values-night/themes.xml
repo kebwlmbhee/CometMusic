@@ -8,7 +8,6 @@
 
     <style name="Theme.CometMusic" parent="Base.Theme.CometMusic.Night">
         <item name="colorPrimary">@color/dark</item>
-        <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@android:color/white</item>
         <item name="colorOnSecondary">@color/brown_black</item>
         <item name="selectableItemBackground">@color/light_green</item>
