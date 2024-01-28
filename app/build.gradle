@@ -31,7 +31,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '33.0.2'
     buildFeatures {
         dataBinding true
     }
@@ -83,7 +82,7 @@ dependencies {
 
     testImplementation "org.robolectric:robolectric:4.10.3"
 
-    debugImplementation "androidx.fragment:fragment-testing:1.6.1"
+    debugImplementation "androidx.fragment:fragment-testing:1.6.2"
 
     // androidTest
     implementation 'androidx.test.ext:junit:1.1.5'

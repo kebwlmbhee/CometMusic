@@ -35,7 +35,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int LOAD_COVER_IMAGE_AFTER_STOP_SCROLLING_MILLISECOND = 3000;
 
-    public final static int DELAY_BETWEEN_ITEMS_MILLISECOND = 100;
+    public final static long DELAY_BETWEEN_ITEMS_MILLISECOND = 100L;
+
+    public final static int STROKE_WIDTH = 8;
 
 
     private boolean isScrolling = false;
@@ -50,7 +52,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Handler countTimeHandler = new Handler();
 
-    private final Handler backgroundHandler = new Handler();
+    private Handler backgroundHandler = new Handler();
 
 
     // members
@@ -65,6 +67,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     MediaController player;
 
     private PlayerControlListener playerControlListener;
+
+    private SongBindingHolder previousViewHolder;
 
     boolean isSearch = false;
 
@@ -138,6 +142,21 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @VisibleForTesting
+    public void setBackgroundHandler(Handler handler) {
+        backgroundHandler = handler;
+    }
+
+    @VisibleForTesting
+    public Handler getBackgroundHandler() {
+        return backgroundHandler;
+    }
+
+    @VisibleForTesting
+    public SongBindingHolder getPreviousViewHolder() {
+        return previousViewHolder;
+    }
+
+    @VisibleForTesting
     public PlayerControlListener getPlayerControllerListener() {
         return playerControlListener;
     }
@@ -160,21 +179,21 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyItemsChangedOneByOne(start, end);
     }
 
-    private void notifyItemsChangedOneByOne(final int start, final int end) {
+    public void notifyItemsChangedOneByOne(final int start, final int end) {
         Runnable runnable = new Runnable() {
             private int currentPosition = start;
 
             public void run() {
                 if (currentPosition <= end) {
                     notifyItemChanged(currentPosition);
-                    backgroundHandler.postDelayed(this, DELAY_BETWEEN_ITEMS_MILLISECOND);
                     ++currentPosition;
+                    backgroundHandler.postDelayed(this, DELAY_BETWEEN_ITEMS_MILLISECOND);
                 }
             }
         };
 
         // trigger runnable
-        backgroundHandler.post(runnable);
+        backgroundHandler.postDelayed(runnable, DELAY_BETWEEN_ITEMS_MILLISECOND);
     }
 
     public void clearImageCache() {
@@ -229,11 +248,11 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(player.getCurrentMediaItem() != null &&
                 player.getCurrentMediaItem().mediaId.equals(String.valueOf(song.getUri()))) {
             if(cardView.getStrokeWidth() == 0) {
-                cardView.setStrokeWidth(8);
+                cardView.setStrokeWidth(STROKE_WIDTH);
                 clearViewBorder(false);
             }
         }
-        else if(cardView.getStrokeWidth() == 8){
+        else if(cardView.getStrokeWidth() == STROKE_WIDTH){
             cardView.setStrokeWidth(0);
         }
 
@@ -302,21 +321,23 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if (currentHolder != null) {
                     currentCardHolder = currentHolder.binding.card;
                     currentIndex = viewPosition;
-                    currentCardHolder.setStrokeWidth(8);
+                    currentCardHolder.setStrokeWidth(STROKE_WIDTH);
                 }
             });
         }
     }
+
     public void clearViewBorder(boolean clearCurrent) {
         if(previousCardHolder != null && previousCardHolder.getStrokeWidth() != 0) {
             previousCardHolder.setStrokeWidth(0);
         }
 
-        SongBindingHolder previousViewHolder = (SongBindingHolder) recyclerView.findViewHolderForAdapterPosition(previousIndex);
+        previousViewHolder = (SongBindingHolder) recyclerView.findViewHolderForAdapterPosition(previousIndex);
         if (previousViewHolder != null && previousViewHolder.binding.card.getStrokeWidth() != 0) {
             previousViewHolder.binding.card.setStrokeWidth(0);
         }
 
+        // clear all border
         if(clearCurrent && currentCardHolder != null) {
             currentCardHolder.setStrokeWidth(0);
             previousCardHolder = null;
@@ -353,7 +374,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     return;
                 }
                 if ((times & 1) == 0) {
-                    flashCardHolder.setStrokeWidth(8);
+                    flashCardHolder.setStrokeWidth(STROKE_WIDTH);
                 }
                 else {
                     flashCardHolder.setStrokeWidth(0);

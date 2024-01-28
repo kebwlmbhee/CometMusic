@@ -251,7 +251,6 @@ public class CurrentPlayerViewFragment extends Fragment {
         playerViewModel.setCurrentSecond();
 
         playerViewModel.setCurrentSongName();
-
     }
 
     public void updateCurrentPlayingCover(int position) {
