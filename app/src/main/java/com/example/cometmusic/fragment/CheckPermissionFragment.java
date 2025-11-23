@@ -25,6 +25,7 @@ import androidx.navigation.Navigation;
 import com.example.cometmusic.R;
 import com.example.cometmusic.utils.buildversion.BuildVersionImpl;
 import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.utils.buildversion.BuildVersionProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
@@ -32,18 +33,17 @@ public class CheckPermissionFragment extends Fragment {
 
     private SharedData sharedData;
 
-    private final BuildVersionImpl buildVersionImpl;
+    private final BuildVersionProvider buildVersionProvider;
 
     // for prod
     public CheckPermissionFragment() {
-        buildVersionImpl = new BuildVersionImpl(Build.VERSION.SDK_INT);
+        buildVersionProvider = new BuildVersionImpl(Build.VERSION.SDK_INT);
     }
 
-
     // for test
-    public CheckPermissionFragment(SharedData sharedData, BuildVersionImpl buildVersionProvider) {
+    public CheckPermissionFragment(SharedData sharedData, BuildVersionProvider buildVersionProvider) {
         this.sharedData = sharedData;
-        this.buildVersionImpl = buildVersionProvider;
+        this.buildVersionProvider = buildVersionProvider;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CheckPermissionFragment extends Fragment {
     }
 
     public boolean checkStoragePermissions() {
-        if (buildVersionImpl.isTiramisuOrAbove()) {
+        if (buildVersionProvider.isTiramisuOrAbove()) {
             return requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) == PERMISSION_GRANTED
                 && requireActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PERMISSION_GRANTED;
 
@@ -93,7 +93,7 @@ public class CheckPermissionFragment extends Fragment {
 
         String rationalMessage;
 
-        if (buildVersionImpl.isTiramisuOrAbove()) {
+        if (buildVersionProvider.isTiramisuOrAbove()) {
             // request permission
             permissionArray = new String[] {
                     Manifest.permission.READ_MEDIA_AUDIO,
