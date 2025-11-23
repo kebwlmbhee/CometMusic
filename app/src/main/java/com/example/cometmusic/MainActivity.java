@@ -65,11 +65,11 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
 
         closeActivityActionReceiver = new CloseActivityActionReceiver();
         IntentFilter closeActivityActionFilter = new IntentFilter(REQUEST_CLOSE_MAIN_ACTIVITY_ACTION);
-        registerReceiver(closeActivityActionReceiver, closeActivityActionFilter);
+        registerReceiver(closeActivityActionReceiver, closeActivityActionFilter, RECEIVER_NOT_EXPORTED);
 
         changePlayerModeActionReceiver = new ChangePlayerModeActionReceiver();
         IntentFilter changePlayerModeActionFilter = new IntentFilter(REQUEST_CHANGE_PLAYER_MODE_ACTION);
-        registerReceiver(changePlayerModeActionReceiver, changePlayerModeActionFilter);
+        registerReceiver(changePlayerModeActionReceiver, changePlayerModeActionFilter, RECEIVER_NOT_EXPORTED);
     }
 
     @Override
