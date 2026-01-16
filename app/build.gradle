@@ -1,11 +1,10 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
     namespace 'com.example.cometmusic'
-    compileSdk 36
+    compileSdk 34
 
     testOptions {
         unitTests.returnDefaultValues = true
@@ -15,7 +14,7 @@ android {
     defaultConfig {
         applicationId "com.example.cometmusic"
         minSdk 29
-        targetSdk 36
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -29,20 +28,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildFeatures {
         dataBinding true
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.17.0'
     def lifecycle_version = "2.6.2"
     def nav_version = "2.7.4"
     def media3_version = "1.1.1"
