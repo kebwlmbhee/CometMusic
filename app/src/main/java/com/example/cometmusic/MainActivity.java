@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.util.UnstableApi;
 import androidx.navigation.NavController;
@@ -31,7 +32,7 @@ import com.example.cometmusic.viewmodel.PlayerViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         setContentView(R.layout.activity_main);
 
         playerViewModel = new ViewModelProvider(this).get(PlayerViewModel.class);
