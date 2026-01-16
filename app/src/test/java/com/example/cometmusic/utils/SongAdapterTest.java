@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.cometmusic.model.Song;
 import com.example.cometmusic.utils.factory.GlideProvider;
 import com.google.android.material.card.MaterialCardView;
 

@@ -22,6 +22,7 @@ import com.bumptech.glide.Priority;
 import com.example.cometmusic.R;
 import com.example.cometmusic.databinding.SongRowItemBinding;
 import com.example.cometmusic.model.Song;
+import com.example.cometmusic.model.SongKt;
 import com.example.cometmusic.utils.factory.GlideProvider;
 import com.google.android.material.card.MaterialCardView;
 
@@ -387,7 +388,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     // Load cover image using Glide
     private void loadCoverImageWithGlide(SongBindingHolder viewHolder, Song song) {
 
-        Bitmap coverImage = song.getCoverImage(context);
+        Bitmap coverImage = SongKt.getCoverImage(song, context);
 
         if (coverImage != null) {
             Glide.with(context)

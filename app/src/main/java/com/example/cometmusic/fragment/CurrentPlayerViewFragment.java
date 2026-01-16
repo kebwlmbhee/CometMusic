@@ -33,6 +33,7 @@ import com.example.cometmusic.R;
 import com.example.cometmusic.databinding.FragmentCurrentPlayerViewBinding;
 import com.example.cometmusic.model.SharedData;
 import com.example.cometmusic.model.Song;
+import com.example.cometmusic.model.SongKt;
 import com.example.cometmusic.viewmodel.PlayerViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -267,7 +268,7 @@ public class CurrentPlayerViewFragment extends Fragment {
     public Bitmap getCurrentPlayingCover(int position) {
         if (position >= 0 && position < songs.size()) {
             Song song = songs.get(position);
-            return song.getCoverImage(requireContext());
+            return SongKt.getCoverImage(song, requireContext());
         }
         return null;
     }
