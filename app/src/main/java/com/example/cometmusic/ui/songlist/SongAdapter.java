@@ -1,4 +1,4 @@
-package com.example.cometmusic.utils;
+package com.example.cometmusic.ui.songlist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

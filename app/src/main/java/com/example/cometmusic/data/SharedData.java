@@ -1,4 +1,4 @@
-package com.example.cometmusic.model;
+package com.example.cometmusic.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;

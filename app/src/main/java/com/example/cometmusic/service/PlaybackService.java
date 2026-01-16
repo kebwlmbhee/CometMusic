@@ -23,10 +23,10 @@ import androidx.media3.session.SessionCommand;
 import androidx.media3.session.SessionCommands;
 import androidx.media3.session.SessionResult;
 
-import com.example.cometmusic.MainActivity;
+import com.example.cometmusic.ui.MainActivity;
 import com.example.cometmusic.R;
-import com.example.cometmusic.model.FetchAudioFiles;
-import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.repository.FetchAudioFiles;
+import com.example.cometmusic.data.SharedData;
 import com.example.cometmusic.model.Song;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;

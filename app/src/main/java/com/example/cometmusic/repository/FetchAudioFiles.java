@@ -1,4 +1,4 @@
-package com.example.cometmusic.model;
+package com.example.cometmusic.repository;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.cometmusic.model.Song;
+import com.example.cometmusic.data.SharedData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

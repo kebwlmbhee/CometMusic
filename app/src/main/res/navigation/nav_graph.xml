@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/currentListFragment"
-        android:name="com.example.cometmusic.fragment.CurrentListFragment"
+        android:name="com.example.cometmusic.ui.songlist.CurrentListFragment"
         tools:layout="@layout/fragment_current_list" >
         <action
             android:id="@+id/action_currentListFragment_to_currentPlayerViewFragment"
@@ -15,12 +15,12 @@
     </fragment>
     <fragment
         android:id="@+id/currentPlayerViewFragment"
-        android:name="com.example.cometmusic.fragment.CurrentPlayerViewFragment"
+        android:name="com.example.cometmusic.ui.player.CurrentPlayerViewFragment"
         android:label="fragment_current_player_view"
         tools:layout="@layout/fragment_current_player_view" />
     <fragment
         android:id="@+id/checkPermissionFragment"
-        android:name="com.example.cometmusic.fragment.CheckPermissionFragment"
+        android:name="com.example.cometmusic.ui.permission.CheckPermissionFragment"
         android:label="fragment_check_permission"
         tools:layout="@layout/fragment_check_permission" />
 </navigation>

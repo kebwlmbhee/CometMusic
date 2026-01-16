@@ -1,4 +1,4 @@
-package com.example.cometmusic.fragment;
+package com.example.cometmusic.ui.player;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -31,10 +31,10 @@ import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.databinding.FragmentCurrentPlayerViewBinding;
-import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.data.SharedData;
 import com.example.cometmusic.model.Song;
 import com.example.cometmusic.model.SongKt;
-import com.example.cometmusic.viewmodel.PlayerViewModel;
+import com.example.cometmusic.ui.PlayerViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 

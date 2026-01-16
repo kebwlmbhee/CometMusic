@@ -1,4 +1,4 @@
-package com.example.cometmusic.fragment;
+package com.example.cometmusic.ui.permission;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -24,7 +24,7 @@ import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.utils.buildversion.BuildVersionImpl;
-import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.data.SharedData;
 import com.example.cometmusic.utils.buildversion.BuildVersionProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 

@@ -11,6 +11,8 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.cometmusic.ui.decoration.ItemSpacingDecoration;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

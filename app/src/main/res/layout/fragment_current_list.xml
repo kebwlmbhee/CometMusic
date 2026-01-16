@@ -6,17 +6,17 @@
     <data>
         <variable
             name="playerViewModel"
-            type="com.example.cometmusic.viewmodel.PlayerViewModel" />
+            type="com.example.cometmusic.ui.PlayerViewModel" />
         
         <variable
             name="currentListFragment"
-            type="com.example.cometmusic.fragment.CurrentListFragment" />
+            type="com.example.cometmusic.ui.songlist.CurrentListFragment" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.CurrentListFragment">
+        tools:context=".ui.songlist.CurrentListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

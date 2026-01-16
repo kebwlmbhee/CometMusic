@@ -1,4 +1,4 @@
-package com.example.cometmusic;
+package com.example.cometmusic.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.cometmusic.viewmodel.PlayerViewModel;
+import com.example.cometmusic.R;
 
 @UnstableApi public class MainActivity extends AppCompatActivity {
 

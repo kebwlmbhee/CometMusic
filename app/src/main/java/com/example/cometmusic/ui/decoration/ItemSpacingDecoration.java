@@ -1,4 +1,4 @@
-package com.example.cometmusic.utils;
+package com.example.cometmusic.ui.decoration;
 
 import android.graphics.Rect;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.example.cometmusic.fragment;
+package com.example.cometmusic.ui.songlist;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,13 +50,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.databinding.FragmentCurrentListBinding;
-import com.example.cometmusic.model.SharedData;
+import com.example.cometmusic.data.SharedData;
 import com.example.cometmusic.model.Song;
 import com.example.cometmusic.service.PlaybackService;
-import com.example.cometmusic.utils.ItemSpacingDecoration;
-import com.example.cometmusic.utils.SongAdapter;
+import com.example.cometmusic.ui.decoration.ItemSpacingDecoration;
 import com.example.cometmusic.utils.factory.GlideProvider;
-import com.example.cometmusic.viewmodel.PlayerViewModel;
+import com.example.cometmusic.ui.PlayerViewModel;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 
