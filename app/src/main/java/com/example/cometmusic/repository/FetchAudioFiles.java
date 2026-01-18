@@ -8,8 +8,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.cometmusic.model.Song;
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.model.Song;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

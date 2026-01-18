@@ -23,8 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
-import com.example.cometmusic.utils.buildversion.BuildVersionImpl;
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.utils.buildversion.BuildVersionImpl;
 import com.example.cometmusic.utils.buildversion.BuildVersionProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 

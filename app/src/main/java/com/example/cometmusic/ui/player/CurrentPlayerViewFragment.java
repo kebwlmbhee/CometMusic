@@ -30,8 +30,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.cometmusic.R;
-import com.example.cometmusic.databinding.FragmentCurrentPlayerViewBinding;
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.databinding.FragmentCurrentPlayerViewBinding;
 import com.example.cometmusic.model.Song;
 import com.example.cometmusic.model.SongKt;
 import com.example.cometmusic.ui.PlayerViewModel;

@@ -49,8 +49,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cometmusic.R;
-import com.example.cometmusic.databinding.FragmentCurrentListBinding;
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.databinding.FragmentCurrentListBinding;
 import com.example.cometmusic.model.Song;
 import com.example.cometmusic.service.PlaybackService;
 import com.example.cometmusic.ui.decoration.ItemSpacingDecoration;
