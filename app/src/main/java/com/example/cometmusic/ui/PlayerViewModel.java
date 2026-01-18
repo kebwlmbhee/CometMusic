@@ -12,8 +12,8 @@ import androidx.media3.session.SessionToken;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.data.SharedData;
-import com.example.cometmusic.repository.FetchAudioFiles;
 import com.example.cometmusic.model.Song;
+import com.example.cometmusic.repository.FetchAudioFiles;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +27,6 @@ public class PlayerViewModel extends AndroidViewModel {
     public static final String savedSongNotFoundVariableIsNull =
             "The savedSongNotFound variable should be initialized by calling the getSavedMediaItemIndex() method first";
 
-    private final FetchAudioFiles fetchAudioFiles;
     private final SharedData sharedData;
 
     private final MutableLiveData<MediaController> player = new MutableLiveData<>();
@@ -53,14 +52,12 @@ public class PlayerViewModel extends AndroidViewModel {
     public PlayerViewModel(Application application) {
         super(application);
         sharedData = new SharedData(application.getApplicationContext());
-        fetchAudioFiles = FetchAudioFiles.getInstance(getApplication().getApplicationContext());
     }
 
     // for test
-    public PlayerViewModel(Application application, SharedData sharedData, FetchAudioFiles fetchAudioFiles) {
+    public PlayerViewModel(Application application, SharedData sharedData) {
         super(application);
         this.sharedData = sharedData;
-        this.fetchAudioFiles = fetchAudioFiles;
     }
 
     public void setPlayer(MediaController player) {
@@ -285,7 +282,8 @@ public class PlayerViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Song>> getSongs() {
         if(songs.getValue() == null) {
-            songs.setValue(fetchAudioFiles.getSongs());
+            FetchAudioFiles.INSTANCE.fetchSongs();
+            songs.setValue(FetchAudioFiles.INSTANCE.getSongs());
         }
         return songs;
     }
@@ -295,7 +293,7 @@ public class PlayerViewModel extends AndroidViewModel {
     }
 
     public int getSavedMediaItemIndex() {
-        int index = fetchAudioFiles.getSavedMediaItemIndex();
+        int index = FetchAudioFiles.INSTANCE.getSavedMediaItemIndex();
         // return the first song when the saved song is not found in the current path
         if(index == -1) {
             setSavedSongNotFound(true);

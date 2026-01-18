@@ -24,9 +24,9 @@ import androidx.media3.session.SessionCommands;
 import androidx.media3.session.SessionResult;
 
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.repository.FetchAudioFiles;
 import com.example.cometmusic.ui.MainActivity;
 import com.example.cometmusic.R;
-import com.example.cometmusic.repository.FetchAudioFiles;
 import com.example.cometmusic.model.Song;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.Futures;
@@ -175,9 +175,10 @@ public class PlaybackService extends MediaSessionService {
         }
 
         private MediaSession.MediaItemsWithStartPosition restorePlaylist() {
-            List<Song> songs = FetchAudioFiles.getInstance(getApplicationContext()).getSongs();
+            FetchAudioFiles.INSTANCE.fetchSongs();
+            List<Song> songs = FetchAudioFiles.INSTANCE.getSongs();
             List<MediaItem> mediaItems = getMediaItems(songs);
-            int startIndex = FetchAudioFiles.getInstance(getApplicationContext()).getSavedMediaItemIndex();
+            int startIndex = FetchAudioFiles.INSTANCE.getSavedMediaItemIndex();
             long startPosition = sharedData.getSongPosition();
 
             return new MediaSession.MediaItemsWithStartPosition(mediaItems, startIndex, startPosition);

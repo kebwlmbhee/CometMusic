@@ -30,6 +30,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.example.cometmusic.R;
 import com.example.cometmusic.data.SharedData;
+import com.example.cometmusic.model.Song;
 import com.example.cometmusic.repository.FetchAudioFiles;
 import com.example.cometmusic.ui.PlayerViewModel;
 
@@ -77,7 +78,7 @@ public class PlayerViewModelTest {
         mockFetchAudioFiles = mock(FetchAudioFiles.class);
         mockPlayer = mock(MediaController.class);
 
-        playerViewModel = new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles);
+        playerViewModel = new PlayerViewModel(mockApplication, mockSharedData);
     }
 
     @Test
@@ -89,7 +90,7 @@ public class PlayerViewModelTest {
 
         // assert the exception message
         String actualMessage = exception.getMessage();
-        assertEquals(actualMessage, PlayerViewModel.playerIsNullException);
+        assertEquals(PlayerViewModel.playerIsNullException, actualMessage);
     }
 
     @Test
@@ -107,7 +108,7 @@ public class PlayerViewModelTest {
         when(mockSharedData.getPlayerMode()).thenReturn(2);
 
         // call the method that should be tested
-        assertEquals((Object) playerViewModel.getPlayerMode().getValue(), 2);
+        assertEquals(2, (Object) playerViewModel.getPlayerMode().getValue());
     }
 
     @Test
@@ -133,7 +134,7 @@ public class PlayerViewModelTest {
         playerViewModel.setPlayerMode(1);
 
         // 2 is represent REPEAT_MODE_ALL
-        assertEquals((Object) repeatModeCaptor.getValue(), 2);
+        assertEquals(2, (Object) repeatModeCaptor.getValue());
 
         // shuffleMode is false
         assertFalse(shuffleModeCaptor.getValue());
@@ -221,7 +222,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToNextSongWithIsPlayerExistMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -235,7 +236,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToNextSongWithHasNextMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -251,7 +252,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToNextSongWithConditionCorresponded_CallThePlayerSeekToNext() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -267,7 +268,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToPreviousSongWithIsPlayerExistMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -281,7 +282,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToPreviousSongWithHasPreviousMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -297,7 +298,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SkipToPreviousSongWithConditionCorresponded_CallThePlayerSeekToPrevious() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -313,7 +314,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetPlayerCurrentIndexWithIsPlayerExistMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
         when(partialMock.isPlayerExistMediaItem()).thenReturn(false);
 
         // call the method that should be tested
@@ -322,7 +323,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetPlayerCurrentIndexWithIsPlayerExistMediaItemIsTrue_ReturnsCurrentMediaItemIndex() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -346,7 +347,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SetDurationSecondWithIsPlayerExistMediaItemIsFalse_ResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(false);
 
@@ -358,7 +359,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SetDurationSecondWithIsPlayerExistMediaItemIsTrue_ResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -415,7 +416,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SetCurrentSecondWithIsPlayerExistMediaItemIsFalse_DefaultResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(ApplicationProvider.getApplicationContext(), mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(ApplicationProvider.getApplicationContext(), mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -440,7 +441,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SetCurrentSecondWithIsPlayerExistMediaItemIsTrue_ResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -461,7 +462,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetReadableCurrentStringWithReadableCurrentStringIsNull_CallSetCurrentSecond() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         doNothing().when(partialMock).setCurrentSecond();
 
@@ -473,7 +474,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetReadableDurationStringWithReadableDurationStringIsNull_CallSetDurationSecond() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         doNothing().when(partialMock).setDurationSecond();
 
@@ -485,7 +486,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SeekToPosition_ResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -497,7 +498,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SeekToSongIndexAndPosition_ResultIsSet() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -524,7 +525,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetCurrentSongNameWithCurrentSongNameIsNull_CallsSetCurrentSongName() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         // call the method that should be tested
         assertNull(partialMock.getCurrentSongName().getValue());
@@ -534,7 +535,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_GetCurrentSongNameWithCurrentSongNameProvided_ReturnsValue() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -561,7 +562,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_clickPlayPauseBtnWithIsPlayerExistMediaItemFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(false);
 
@@ -578,7 +579,7 @@ public class PlayerViewModelTest {
     @Test
     public void playerViewModel_clickPlayPauseBtnWithGetIsPlayingReturnsTrue_PausesThePlayer() {
 
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -596,7 +597,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_clickPlayPauseBtnWithGetIsPlayingReturnsFalse_PlayThePlayer() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -840,7 +841,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SaveCurrentSongStatusWithIsPlayerExistMediaItemIsFalse_ReturnsEarly() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         when(partialMock.isPlayerExistMediaItem()).thenReturn(false);
 
@@ -856,7 +857,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_SaveCurrentSongStatusWithIsPlayerExistMediaItemIsTrue_SavesStatusToSharedData() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         partialMock.setPlayer(mockPlayer);
 
@@ -893,7 +894,7 @@ public class PlayerViewModelTest {
 
     @Test
     public void playerViewModel_OnCleared_CallsSaveCurrentSongStatus() {
-        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData, mockFetchAudioFiles));
+        PlayerViewModel partialMock = spy(new PlayerViewModel(mockApplication, mockSharedData));
 
         // call the method that should be tested
         partialMock.onCleared();
