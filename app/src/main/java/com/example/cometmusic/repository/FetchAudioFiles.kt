@@ -7,20 +7,20 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.core.net.toUri
 import com.example.cometmusic.data.SharedData
 import com.example.cometmusic.model.Song
 
 object FetchAudioFiles {
     val TAG: String = FetchAudioFiles::class.java.simpleName
 
-    private lateinit var appContext: Context;
-    private lateinit var sharedData: SharedData
-    private var initialized = false
+    private var appContext: Context? = null
+    private val sharedData by lazy { SharedData(appContext!!) }
 
     fun init(application: Application) {
-        if (initialized) return
-        appContext = application.applicationContext
-        this.sharedData = SharedData(appContext);
+        if (appContext == null) {
+            appContext = application.applicationContext
+        }
     }
 
     private val _songs = mutableListOf<Song>()
@@ -61,7 +61,7 @@ object FetchAudioFiles {
             selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0"
 
             // convert URL encoded to String
-            val decodedPath = Uri.decode(selectedFolderUri.getLastPathSegment())
+            val decodedPath = Uri.decode(selectedFolderUri.lastPathSegment)
             var removeColonPath: String?
 
             // only keep the path user selected
@@ -81,8 +81,8 @@ object FetchAudioFiles {
 
         // get the songs
         try {
-            appContext.getContentResolver()
-                .query(mediaStoreUri, projection, selection, null, sortOrder).use { cursor ->
+            appContext?.contentResolver
+                ?.query(mediaStoreUri, projection, selection, null, sortOrder).use { cursor ->
                     // cache cursor indices
                     val idColumn = cursor!!.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
                     val nameColumn =
@@ -119,12 +119,12 @@ object FetchAudioFiles {
 
                         // album artwork uri
                         val albumArtworkUri = ContentUris.withAppendedId(
-                            Uri.parse("content://media/external/audio/albumart"),
+                            "content://media/external/audio/albumart".toUri(),
                             albumId
                         )
 
                         // remove file extension like .mp3 from the song
-                        name = name.substring(0, name.lastIndexOf("."))
+                        name = name.substringBeforeLast(".", name)
                         // song item
                         val song =
                             Song(playlistPosition, id, name, uri, albumArtworkUri, size, duration)
