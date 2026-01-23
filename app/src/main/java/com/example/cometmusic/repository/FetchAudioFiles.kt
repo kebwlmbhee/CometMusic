@@ -14,32 +14,31 @@ import com.example.cometmusic.model.Song
 object FetchAudioFiles {
     val TAG: String = FetchAudioFiles::class.java.simpleName
 
-    private var appContext: Context? = null
+    private lateinit var appContext: Context
     private val sharedData by lazy { SharedData(appContext!!) }
 
     fun init(application: Application) {
-        if (appContext == null) {
+        if (!::appContext.isInitialized) {
             appContext = application.applicationContext
         }
     }
 
     private val _songs = mutableListOf<Song>()
-    val songs: MutableList<Song> = _songs
+    val songs: List<Song> = _songs
     private var _savedMediaItemIndex = -1
-    val savedMediaItemIndex: Int = _savedMediaItemIndex
+    val savedMediaItemIndex = _savedMediaItemIndex
 
     fun fetchSongs() {
         _savedMediaItemIndex = -1
 
-        songs.clear()
+        _songs.clear()
 
-        var selectedFolderUri: Uri? = null
-        if (sharedData.chooseDir != null) {
-            selectedFolderUri = Uri.parse(sharedData.chooseDir)
-        }
+        val selectedFolderUri: Uri? = sharedData.chooseDir?.toUri()
+        val targetMediaId = sharedData.songMediaId
 
         sharedData.deniedTimes = 0
-        val mediaStoreUri: Uri = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        val mediaStoreUri =
+            MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
 
         // define projection
         val projection: Array<String> = arrayOf(
@@ -53,62 +52,67 @@ object FetchAudioFiles {
         )
 
         var selection: String? = null
-
+        var selectionArgs: Array<String>? = null
         var isScopeInSDCard = false
 
-        if (selectedFolderUri != null) {
+        selectedFolderUri?.let {
             // only music, music file is non-zero
-            selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0"
+            selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0"
 
             // convert URL encoded to String
-            val decodedPath = Uri.decode(selectedFolderUri.lastPathSegment)
-            var removeColonPath: String?
+            val decodedPath = Uri.decode(it.lastPathSegment)
 
             // only keep the path user selected
             val colonIndex = decodedPath.lastIndexOf(":")
-            removeColonPath = decodedPath
+            var removeColonPath = decodedPath
             if (colonIndex != -1) {
-                isScopeInSDCard = decodedPath.substring(0, colonIndex) != "primary"
+                isScopeInSDCard = decodedPath.take(colonIndex) != "primary"
                 removeColonPath = decodedPath.substring(colonIndex + 1)
             }
 
             // add RELATIVE_PATH condition，find match path
             // can not distinguish sdcard or storage
-            selection += " AND " + MediaStore.Audio.Media.RELATIVE_PATH + " LIKE '" + removeColonPath + "/%'"
+            selection = "$selection AND ${MediaStore.Audio.Media.RELATIVE_PATH} LIKE ?"
+            // Avoid crash when "'" in the folder
+            selectionArgs = arrayOf("$removeColonPath/%")
         }
         // order
-        val sortOrder = MediaStore.Audio.Media.DATE_ADDED + " DESC"
+        val sortOrder = "${MediaStore.Audio.Media.DATE_ADDED} DESC"
 
         // get the songs
         try {
-            appContext?.contentResolver
-                ?.query(mediaStoreUri, projection, selection, null, sortOrder).use { cursor ->
-                    // cache cursor indices
-                    val idColumn = cursor!!.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
-                    val nameColumn =
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
-                    val durationColumn =
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
-                    val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
-                    val albumColumn =
-                        cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
-                    val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
-
+            appContext.contentResolver.query(
+                mediaStoreUri,
+                projection,
+                selection,
+                selectionArgs,
+                sortOrder
+            )?.use { cursor ->
+                // cache cursor indices
+                cursor.let {
+                    val idColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+                    val nameColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+                    val durationColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+                    val sizeColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
+                    val albumColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+                    val dataColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
 
                     var playlistPosition = 0
                     // clear the previous loaded before adding loading again
-                    while (cursor.moveToNext()) {
+                    while (it.moveToNext()) {
                         // get the values of a column for a given audio file
 
-                        val id = cursor.getLong(idColumn)
-                        var name = cursor.getString(nameColumn)
-                        val duration = cursor.getInt(durationColumn).toLong()
-                        val size = cursor.getInt(sizeColumn)
-                        val albumId = cursor.getLong(albumColumn)
-                        val data = cursor.getString(dataColumn)
+                        val id = it.getLong(idColumn)
+                        var name = it.getString(nameColumn)
+                        val duration = it.getInt(durationColumn).toLong()
+                        val size = it.getInt(sizeColumn)
+                        val albumId = it.getLong(albumColumn)
+                        val data = it.getString(dataColumn)
 
-                        // check if user choose is sdcard or storage, and match the correct path
-                        if (selectedFolderUri != null && isDataPathInSDCard(data) != isScopeInSDCard) continue
+                        // check if user choose is sdcard or storage,
+                        // and match the correct path
+                        if (selectedFolderUri != null &&
+                            isDataPathInSDCard(data) != isScopeInSDCard) continue
 
                         // song uri
                         val uri =
@@ -127,26 +131,34 @@ object FetchAudioFiles {
                         name = name.substringBeforeLast(".", name)
                         // song item
                         val song =
-                            Song(playlistPosition, id, name, uri, albumArtworkUri, size, duration)
+                            Song(playlistPosition,
+                                id,
+                                name,
+                                uri,
+                                albumArtworkUri,
+                                size,
+                                duration
+                            )
 
                         // add song item to song list
-                        songs.add(song)
-
+                        _songs.add(song)
 
                         // add mediaItem to list
-                        if (sharedData.songMediaId != null &&
-                            sharedData.songMediaId == uri.toString()
-                        ) {
+                        if (sharedData.songMediaId == uri.toString()) {
                             _savedMediaItemIndex = songs.size - 1
                         }
                         ++playlistPosition
                     }
                 }
+            }
         } catch (e: Exception) {
             // show Exception
             Log.e(TAG, "Error fetching songs: " + e.message, e)
-            Toast.makeText(appContext, "Failed to fetch songs: " + e.message, Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(
+                appContext,
+                "Failed to fetch songs: " + e.message,
+                Toast.LENGTH_SHORT
+            ).show()
             e.printStackTrace()
         }
     }
