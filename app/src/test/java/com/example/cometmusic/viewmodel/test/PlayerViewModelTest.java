@@ -87,7 +87,7 @@ public class PlayerViewModelTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> playerViewModel.getPlayer());
         String actualMessage = exception.getMessage();
-        assertEquals(PlayerViewModel.playerIsNullException, actualMessage);
+        assertEquals(PlayerViewModel.PLAYER_IS_NULL, actualMessage);
     }
 
     @Test
@@ -519,7 +519,7 @@ public class PlayerViewModelTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> playerViewModel.preparePlayer());
         String actualMessage = exception.getMessage();
-        assertEquals(actualMessage, PlayerViewModel.playerIsNullException);
+        assertEquals(actualMessage, PlayerViewModel.PLAYER_IS_NULL);
     }
 
     @Test
@@ -569,7 +569,7 @@ public class PlayerViewModelTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> playerViewModel.getSavedSongNotFound());
         String actualMessage = exception.getMessage();
-        assertEquals(actualMessage, PlayerViewModel.savedSongNotFoundVariableIsNull);
+        assertEquals(actualMessage, PlayerViewModel.SAVED_SONG_NOT_FOUND_VARIABLE_IS_NULL);
     }
 
     @Test
