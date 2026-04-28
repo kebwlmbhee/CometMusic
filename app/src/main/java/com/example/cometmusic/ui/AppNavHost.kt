@@ -1,6 +1,8 @@
 package com.example.cometmusic.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,7 +22,7 @@ private object Routes {
 fun AppNavHost(playerViewModel: PlayerViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.PERMISSION) {
+    NavHost(navController = navController, startDestination = Routes.PERMISSION, modifier = Modifier.fillMaxSize()) {
         composable(Routes.PERMISSION) {
             CheckPermissionScreen(
                 onPermissionGranted = {
