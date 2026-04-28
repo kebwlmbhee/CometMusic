@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
 }
 
 android {
@@ -33,7 +34,7 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
-        dataBinding true
+        compose true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -41,53 +42,49 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.17.0'
-    def lifecycle_version = "2.6.2"
-    def nav_version = "2.7.4"
+    def lifecycle_version = "2.8.7"
     def media3_version = "1.1.1"
 
-    // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
 
-    // alternately - if using Java8, use the following instead of lifecycle-compiler
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    // Compose BOM
+    def compose_bom = platform('androidx.compose:compose-bom:2024.12.01')
+    implementation compose_bom
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.activity:activity-compose:1.9.3'
 
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
+    // Material for XML activity window themes (Theme.Material3.DayNight.NoActionBar)
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.navigation:navigation-compose:2.8.5'
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // Coil for Compose image loading
+    implementation 'io.coil-kt:coil-compose:2.7.0'
 
     // media3
     implementation "androidx.media3:media3-exoplayer:$media3_version"
     implementation "androidx.media3:media3-session:$media3_version"
 
-    // async load image
+    // Glide (kept for getCoverImage bitmap usage)
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
-    // fast scroll
-    // https://github.com/zhanghai/AndroidFastScroll
-    implementation 'me.zhanghai.android.fastscroll:library:1.2.0'
-
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     // test
-    // Required -- JUnit 4 framework
     testImplementation "junit:junit:4.13.2"
-    // Optional -- Robolectric environment
     testImplementation "androidx.test:core:1.5.0"
-
     testImplementation 'org.mockito:mockito-inline:5.2.0'
-    // Optional -- Mockito framework
     testImplementation "org.mockito:mockito-core:5.2.0"
-
     testImplementation "org.robolectric:robolectric:4.10.3"
-
-    debugImplementation "androidx.fragment:fragment-testing:1.6.2"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
 
     // androidTest
     implementation 'androidx.test.ext:junit:1.1.5'
