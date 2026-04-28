@@ -24,9 +24,14 @@ object FetchAudioFiles {
     }
 
     private val _songs = mutableListOf<Song>()
-    val songs: List<Song> = _songs
+    // Return an immutable snapshot each time so callers don't hold a reference to the
+    // internal mutable list (which would cause Compose LazyColumn to crash if the list
+    // is mutated while the key-index map is being built).
+    val songs: List<Song> get() = _songs.toList()
     private var _savedMediaItemIndex = -1
-    val savedMediaItemIndex = _savedMediaItemIndex
+    // Use a computed property so the value reflects the latest fetchSongs() result,
+    // not just the -1 it was initialised to.
+    val savedMediaItemIndex get() = _savedMediaItemIndex
 
     fun fetchSongs() {
         _savedMediaItemIndex = -1
