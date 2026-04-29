@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -51,9 +52,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -71,6 +75,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -159,6 +165,7 @@ fun SongListScreen(
         if (isSearchActive) {
             isSearchActive = false
             searchQuery = ""
+            scope.launch { listState.scrollToItem(playerViewModel.getPlayerCurrentIndex()) }
         } else if (isBackPressedOnce) {
             (context as? android.app.Activity)?.finish()
         } else {
@@ -222,7 +229,41 @@ fun SongListScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            if (!isSearchActive) {
+            if (isSearchActive) {
+                val focusRequester = remember { FocusRequester() }
+                LaunchedEffect(Unit) { focusRequester.requestFocus() }
+                TopAppBar(
+                    title = {
+                        TextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            placeholder = { Text(context.getString(R.string.toolbar_search)) },
+                            singleLine = true,
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .focusRequester(focusRequester)
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            isSearchActive = false
+                            searchQuery = ""
+                            scope.launch { listState.scrollToItem(playerViewModel.getPlayerCurrentIndex()) }
+                        }) {
+                            Icon(Icons.Default.Close, contentDescription = context.getString(R.string.toolbar_search))
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background
+                    )
+                )
+            } else {
                 TopAppBar(
                     title = {
                         val count = songs?.size ?: 0
@@ -280,70 +321,47 @@ fun SongListScreen(
             }
         }
     ) { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if (isSearchActive) {
-                SearchBar(
-                    inputField = {
-                        SearchBarDefaults.InputField(
-                            query = searchQuery,
-                            onQueryChange = { searchQuery = it },
-                            onSearch = {},
-                            expanded = true,
-                            onExpandedChange = { isSearchActive = it },
-                            placeholder = { Text(context.getString(R.string.toolbar_search)) },
-                            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
-                        )
-                    },
-                    expanded = true,
-                    onExpandedChange = {
-                        isSearchActive = it
-                        if (!it) searchQuery = ""
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {}
-            }
-
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (filteredSongs.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(context.getString(R.string.no_songs))
-                    }
-                } else {
-                    LazyColumnWithFastScroll(
-                        state = listState,
-                        modifier = Modifier.fillMaxSize(),
-                        popupTextProvider = { index -> filteredSongs.getOrNull(index)?.title ?: "" }
-                    ) {
-                        itemsIndexed(filteredSongs, key = { _, song -> song.id }) { _, song ->
-                            val isCurrent = currentMediaId == song.uri?.toString()
-                            SongListItem(
-                                song = song,
-                                isCurrent = isCurrent,
-                                onClick = {
-                                    if (isSearchActive) {
-                                        isSearchActive = false
-                                        searchQuery = ""
-                                        val targetPos = song.playlistPosition
-                                        scope.launch { listState.scrollToItem(targetPos) }
-                                    } else if (isCurrent) {
-                                        if (!playerViewModel.getIsPlaying()) playerViewModel.clickPlayPauseBtn()
-                                        onNavigateToPlayer()
-                                    } else {
-                                        player?.seekTo(song.playlistPosition, 0)
-                                        player?.prepare()
-                                        player?.play()
-                                        // Update name and media ID immediately — onMediaItemTransition
-                                        // is async (IPC) and may lag after setMediaItems+stop.
-                                        playerViewModel.setCurrentSongNameFromTitle(song.title)
-                                        playerViewModel.setCurrentMediaId(song.uri?.toString())
+            if (filteredSongs.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(context.getString(R.string.no_songs))
+                }
+            } else {
+                LazyColumnWithFastScroll(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    popupTextProvider = { index -> filteredSongs.getOrNull(index)?.title ?: "" }
+                ) {
+                    itemsIndexed(filteredSongs, key = { _, song -> song.id }) { _, song ->
+                        val isCurrent = currentMediaId == song.uri?.toString()
+                        SongListItem(
+                            song = song,
+                            isCurrent = isCurrent,
+                            onClick = {
+                                if (isSearchActive) {
+                                    isSearchActive = false
+                                    searchQuery = ""
+                                    scope.launch {
+                                        listState.scrollToItem(playerViewModel.getPlayerCurrentIndex())
                                     }
+                                } else if (isCurrent) {
+                                    if (!playerViewModel.getIsPlaying()) playerViewModel.clickPlayPauseBtn()
+                                    onNavigateToPlayer()
+                                } else {
+                                    player?.seekTo(song.playlistPosition, 0)
+                                    player?.prepare()
+                                    player?.play()
+                                    // Update name and media ID immediately — onMediaItemTransition
+                                    // is async (IPC) and may lag after setMediaItems+stop.
+                                    playerViewModel.setCurrentSongNameFromTitle(song.title)
+                                    playerViewModel.setCurrentMediaId(song.uri?.toString())
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
             }
@@ -419,6 +437,14 @@ private fun MiniPlayer(
             .navigationBarsPadding()
             .height(56.dp)
             .background(MaterialTheme.colorScheme.surfaceVariant)
+            .drawBehind {
+                drawLine(
+                    color = Color(0xFFAAAAAA),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 1.dp.toPx()
+                )
+            }
             .clickable(onClick = onOpenPlayer)
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -545,6 +571,7 @@ private fun getSize(bytes: Long): String {
 private fun LazyColumnWithFastScroll(
     state: LazyListState,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     popupTextProvider: ((Int) -> String)? = null,
     content: LazyListScope.() -> Unit
 ) {
@@ -555,7 +582,7 @@ private fun LazyColumnWithFastScroll(
     val density = LocalDensity.current
 
     Box(modifier = modifier.onSizeChanged { containerHeightPx = it.height.toFloat() }) {
-        LazyColumn(state = state, modifier = Modifier.fillMaxSize()) {
+        LazyColumn(state = state, modifier = Modifier.fillMaxSize(), contentPadding = contentPadding) {
             content()
         }
 
