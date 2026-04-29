@@ -63,6 +63,7 @@ import com.example.cometmusic.ui.PlayerViewModel
 import com.example.cometmusic.ui.theme.LightGreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cometmusic.ui.theme.CometMusicTheme
 
@@ -199,9 +200,9 @@ fun PlayerScreen(
             )
         }
 
-        // Song name – 20%
+        // Song name – 10%
         Box(
-            modifier = Modifier.fillMaxWidth().weight(2f),
+            modifier = Modifier.fillMaxWidth().weight(1f),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -229,9 +230,9 @@ fun PlayerScreen(
             )
         }
 
-        // Control buttons – 10%
+        // Control buttons – 20%
         Row(
-            modifier = Modifier.fillMaxWidth().weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(2f),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -365,7 +366,8 @@ private fun SeekBarSection(
                 valueRange = 0f..maxOf(durationSecond.toFloat(), 1f),
                 colors = SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.secondary,
-                    activeTrackColor = MaterialTheme.colorScheme.secondary
+                    activeTrackColor = MaterialTheme.colorScheme.secondary,
+                    inactiveTrackColor = if (isSystemInDarkTheme()) Color(0xFF3A3A3A) else Color(0xFFC0C0C0),
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
